@@ -132,11 +132,50 @@ Last login: Wed Jan 13 13:36:08 2021 from 192.168.1.2
 ```
 
 ## 2.3 Какие действия мы можем выполнить с файлами, найденными командой find (не запуская других команд)? 
-Например можно далить файл используя ключ __-delete__
+Например можно удалить файл используя ключ __-delete__
 ```bash
 [admin@localhost ~]$ ls
 fileb1.txt  fileb2.txt  testdir
 [admin@localhost ~]$ find fileb1.txt -delete
 [admin@localhost ~]$ ls
 fileb2.txt  testdir
+```
+
+# 3. Команды head и tail
+
+## 3.1 Выведите последние 2 строки файла /etc/fstab
+```bash
+[admin@localhost ~]$ sudo tail -n2 /etc/fstab
+UUID=c2d48651-fb36-4d59-89f6-133f0a7fe8d7 /boot                   xfs     defaults        0 0
+/dev/mapper/centos-swap swap                    swap    defaults        0 0
+```
+
+## 3.2 Первые 7 строк файла /etc/yum.conf
+```bash
+[admin@localhost ~]$ sudo head -n7 /etc/yum.conf
+[main]
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+```
+
+## 3.3 Что произойдёт, если мы запросим больше строк, чем есть в файле?
+Выведутся все строки
+```bash
+[admin@localhost ~]$ sudo wc -l /etc/fstab && head -n13 /etc/fstab
+11 /etc/fstab
+
+#
+# /etc/fstab
+# Created by anaconda on Mon Jan 11 22:11:52 2021
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/mapper/centos-root /                       xfs     defaults        0 0
+UUID=c2d48651-fb36-4d59-89f6-133f0a7fe8d7 /boot                   xfs     defaults        0 0
+/dev/mapper/centos-swap swap                    swap    defaults        0 0
 ```
