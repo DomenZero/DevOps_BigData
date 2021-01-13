@@ -81,3 +81,34 @@ Last login: Wed Jan 13 13:36:08 2021 from 192.168.1.2
 ![ip addr on Asterisk](/images/0_ip_addr_Asterisk.jpg)
 ### Тест __ip addr__ на CentOS_2
 ![ip addr on CENTOS_2](/images/0_ip_addr_CentOS_2.jpg)
+
+# 1. Используя команду ls
+## 1.1 Вывести на экран все файлы, которые расположены в секционных директориях /usr/share/man/manX и содержат слово "config" в имени.
+```bash
+[admin@localhost ~]$ sudo ls  /usr/share/man/man*/*config*
+[sudo] password for admin:
+/usr/share/man/man1/pkg-config.1.gz      /usr/share/man/man5/x509v3_config.5ssl.gz  /usr/share/man/man8/iprconfig.8.gz
+/usr/share/man/man5/config.5ssl.gz       /usr/share/man/man8/authconfig.8.gz        /usr/share/man/man8/lvm-config.8.gz
+/usr/share/man/man5/config-util.5.gz     /usr/share/man/man8/authconfig-tui.8.gz    /usr/share/man/man8/lvmconfig.8.gz
+/usr/share/man/man5/selinux_config.5.gz  /usr/share/man/man8/chkconfig.8.gz         /usr/share/man/man8/lvm-dumpconfig.8.gz
+/usr/share/man/man5/ssh_config.5.gz      /usr/share/man/man8/grub2-mkconfig.8.gz    /usr/share/man/man8/plipconfig.8.gz
+/usr/share/man/man5/sshd_config.5.gz     /usr/share/man/man8/ifconfig.8.gz          /usr/share/man/man8/sys-unconfig.8.gz
+```
+или
+```bash
+[admin@localhost ~]$ sudo ls  /usr/share/man/man?/*config*
+```
+## 1.2 Одним вызовом ls найти все файлы, содержащие слово "system" в каталогах /usr/share/man/man1 и /usr/share/man/man7 
+```bash
+[admin@localhost ~]$ sudo ls /usr/share/man/man{1,7}/*system*
+/usr/share/man/man1/systemctl.1.gz             /usr/share/man/man1/systemd-escape.1.gz             /usr/share/man/man1/systemd-tty-ask-password-agent.1.gz
+/usr/share/man/man1/systemd.1.gz               /usr/share/man/man1/systemd-firstboot.1.gz          /usr/share/man/man7/lvmsystemid.7.gz
+/usr/share/man/man1/systemd-analyze.1.gz       /usr/share/man/man1/systemd-firstboot.service.1.gz  /usr/share/man/man7/systemd.directives.7.gz
+/usr/share/man/man1/systemd-ask-password.1.gz  /usr/share/man/man1/systemd-inhibit.1.gz            /usr/share/man/man7/systemd.generator.7.gz
+/usr/share/man/man1/systemd-bootchart.1.gz     /usr/share/man/man1/systemd-machine-id-commit.1.gz  /usr/share/man/man7/systemd.index.7.gz
+/usr/share/man/man1/systemd-cat.1.gz           /usr/share/man/man1/systemd-machine-id-setup.1.gz   /usr/share/man/man7/systemd.journal-fields.7.gz
+/usr/share/man/man1/systemd-cgls.1.gz          /usr/share/man/man1/systemd-notify.1.gz             /usr/share/man/man7/systemd.special.7.gz
+/usr/share/man/man1/systemd-cgtop.1.gz         /usr/share/man/man1/systemd-nspawn.1.gz             /usr/share/man/man7/systemd.time.7.gz
+/usr/share/man/man1/systemd-delta.1.gz         /usr/share/man/man1/systemd-path.1.gz
+/usr/share/man/man1/systemd-detect-virt.1.gz   /usr/share/man/man1/systemd-run.1.gz
+```
