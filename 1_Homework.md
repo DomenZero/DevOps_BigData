@@ -82,7 +82,7 @@ Last login: Wed Jan 13 13:36:08 2021 from 192.168.1.2
 ### Тест __ip addr__ на CentOS_2
 ![ip addr on CENTOS_2](/images/0_ip_addr_CentOS_2.jpg)
 
-# 1. Используя команду ls
+# 1. Используя команду __ls__
 ## 1.1 Вывести на экран все файлы, которые расположены в секционных директориях /usr/share/man/manX и содержат слово "config" в имени.
 ```bash
 [admin@localhost ~]$ sudo ls  /usr/share/man/man*/*config*
@@ -111,4 +111,32 @@ Last login: Wed Jan 13 13:36:08 2021 from 192.168.1.2
 /usr/share/man/man1/systemd-cgtop.1.gz         /usr/share/man/man1/systemd-nspawn.1.gz             /usr/share/man/man7/systemd.time.7.gz
 /usr/share/man/man1/systemd-delta.1.gz         /usr/share/man/man1/systemd-path.1.gz
 /usr/share/man/man1/systemd-detect-virt.1.gz   /usr/share/man/man1/systemd-run.1.gz
+```
+
+# 2. Команда __find__
+
+## 2.1 Найти в директории /usr/share/man все файлы, которые содержат слово "help"
+```bash
+[admin@localhost ~]$ find /usr/share/man -name *help*
+/usr/share/man/man1/help.1.gz
+/usr/share/man/man5/firewalld.helper.5.gz
+/usr/share/man/man8/mkhomedir_helper.8.gz
+/usr/share/man/man8/pwhistory_helper.8.gz
+/usr/share/man/man8/ssh-pkcs11-helper.8.gz
+```
+## 2.2 Найти там же все файлы, имя которых начинается на "conf"
+```bash
+[admin@localhost ~]$ find /usr/share/man -name conf*
+/usr/share/man/man5/config.5ssl.gz
+/usr/share/man/man5/config-util.5.gz
+```
+
+## 2.3 Какие действия мы можем выполнить с файлами, найденными командой find (не запуская других команд)? 
+Например можно далить файл используя ключ __-delete__
+```bash
+[admin@localhost ~]$ ls
+fileb1.txt  fileb2.txt  testdir
+[admin@localhost ~]$ find fileb1.txt -delete
+[admin@localhost ~]$ ls
+fileb2.txt  testdir
 ```
