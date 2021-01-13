@@ -28,7 +28,7 @@ DNS1=192.168.0.1
 DNS2=192.168.0.2
 ```
 2. Прописываю статические настройки на __eth1__ (__NAT__)
-```
+```editorcongif
 DEVICE=eth1
 NAME=eth1
 BOOTPROTO=static
@@ -40,7 +40,7 @@ DNS1=192.168.1.1
 ```
 ### Настройка вирт. машины **CentOS_2**
 Прописываю статические настройки на __eth0__ (__NAT__)
-```
+```editorcongif
 TYPE=Ethernet
 PROXY_METHOD=none
 BROWSER_ONLY=no
