@@ -5,7 +5,7 @@
 3. Вирт. машине 2 (**CentOS_2**) добавляю только NAT
 ### Настройка вирт. машины **Asterisk**
 1. Прописываю статические настройки на __eth0__ (__Internet__)
-``
+```editorcongif
 TYPE=Ethernet
 PROXY_METHOD=none
 BROWSER_ONLY=no
@@ -26,9 +26,9 @@ NETMASK=255.255.255.0
 GATEWAY=192.168.0.1
 DNS1=192.168.0.1
 DNS2=192.168.0.2
-``
+```
 2. Прописываю статические настройки на __eth1__ (__NAT__)
-``
+```
 DEVICE=eth1
 NAME=eth1
 BOOTPROTO=static
@@ -37,10 +37,10 @@ IPADDR=192.168.1.2
 NETMASK=255.255.255.0
 GATEWAY=192.168.1.1
 DNS1=192.168.1.1
-``
+```
 ### Настройка вирт. машины **CentOS_2**
 Прописываю статические настройки на __eth0__ (__NAT__)
-``
+```
 TYPE=Ethernet
 PROXY_METHOD=none
 BROWSER_ONLY=no
@@ -60,7 +60,7 @@ IPADDR=192.168.1.3
 NETMASK=255.255.255.0
 GATEWAY=192.168.1.1
 DNS=192.168.1.1
-``
+```
 
 ### Тест ssh с Asterisk на CentOS_2
 ```bash
