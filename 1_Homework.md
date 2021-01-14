@@ -438,7 +438,7 @@ drwx------. 7 admin admin  156 Jan 14 16:50 ..
 ‘new/files100.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files100.data[[:digit:]][[:digit:]]’
 ```
 
-## 6.3 Выведете содержимое каталога in-process одной командой
+## 6.3 Выведите содержимое каталога in-process одной командой
 ```bash
 [admin@localhost ~]$ ls -R in-process
 in-process:
@@ -491,7 +491,7 @@ files77.data[[:digit:]][[:digit:]]   files88.data[[:digit:]][[:digit:]]  files99
 [admin@localhost ~]$ mv -v in-process/tread{0..2}/* processed
 ```
 
-## 6.5 Выведете содержимое каталога in-process и processed одной командой
+## 6.5 Выведите содержимое каталога in-process и processed одной командой
 ```bash
 [admin@localhost ~]$ ls -R processed in-process
 in-process:
