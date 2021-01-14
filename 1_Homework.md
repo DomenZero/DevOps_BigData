@@ -179,3 +179,33 @@ obsoletes=1
 UUID=c2d48651-fb36-4d59-89f6-133f0a7fe8d7 /boot                   xfs     defaults        0 0
 /dev/mapper/centos-swap swap                    swap    defaults        0 0
 ```
+
+# 4. Создайте в домашней директории файлы file_name1.md, file_name2.md и file_name3.md. Используя {}, переименуйте.
+
+```bash
+[admin@localhost ~]$ touch file_name{1..3}.md
+[admin@localhost ~]$ mv -v {file_name1.md,file_name1.textdoc} && mv -v {file_name2.md,file_name2} && mv -v {file_name3.md,file_name3.md.latest} && mv -v {file_name1.textdoc,file_name1.txt}
+‘file_name1.md’ -> ‘file_name1.textdoc’
+‘file_name2.md’ -> ‘file_name2’
+‘file_name3.md’ -> ‘file_name3.md.latest’
+‘file_name1.textdoc’ -> ‘file_name1.txt’
+[admin@localhost ~]$ ls
+file_name1.txt  file_name2  file_name3.md.latest  testdir
+```
+
+# 5. Перейдите в директорию /mnt. Напишите как можно больше различных вариантов команды cd, с помощью которых вы можете вернуться обратно в домашнюю директорию вашего пользователя
+
+```bash
+cd ~
+
+cd
+
+cd $HOME
+
+cd ~admin
+ 
+[admin@localhost ~]$ cd /mnt
+[admin@localhost mnt]$ cd -
+/home/admin
+
+```
