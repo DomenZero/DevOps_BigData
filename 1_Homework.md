@@ -204,8 +204,345 @@ cd $HOME
 
 cd ~admin
  
+cd /home/admin
+
 [admin@localhost ~]$ cd /mnt
 [admin@localhost mnt]$ cd -
 /home/admin
 
+```
+
+# 6. Создайте одной командой в домашней директории 3 папки new, in-process, processed. При этом in-process должна содержать в себе еще 3 папки tread0, tread1, tread2
+
+```bash
+[admin@localhost ~]$ mkdir -p -v ~/{new,in-process/tread{0..2},processed}
+mkdir: created directory ‘/home/admin/new’
+mkdir: created directory ‘/home/admin/in-process’
+mkdir: created directory ‘/home/admin/in-process/tread0’
+mkdir: created directory ‘/home/admin/in-process/tread1’
+mkdir: created directory ‘/home/admin/in-process/tread2’
+mkdir: created directory ‘/home/admin/processed’
+```
+
+## 6.1 Cоздайте 100 файлов формата data[[:digit:]][[:digit:]] в папке new
+```bash
+[admin@localhost ~]$ touch new/files{1..100}.data[[:digit:]][[:digit:]]
+[admin@localhost ~]$ ls new -la
+total 12
+drwxrwxr-x. 2 admin admin 8192 Jan 14 16:51 .
+drwx------. 7 admin admin  156 Jan 14 16:50 ..
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files100.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files10.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files11.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files12.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files13.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files14.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files15.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files16.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files17.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files18.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files19.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files1.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files20.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files21.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files22.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files23.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files24.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files25.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files26.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files27.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files28.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files29.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files2.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files30.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files31.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files32.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files33.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files34.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files35.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files36.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files37.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files38.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files39.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files3.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files40.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files41.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files42.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files43.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files44.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files45.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files46.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files47.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files48.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files49.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files4.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files50.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files51.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files52.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files53.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files54.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files55.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files56.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files57.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files58.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files59.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files5.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files60.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files61.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files62.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files63.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files64.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files65.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files66.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files67.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files68.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files69.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files6.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files70.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files71.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files72.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files73.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files74.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files75.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files76.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files77.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files78.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files79.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files7.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files80.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files81.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files82.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files83.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files84.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files85.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files86.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files87.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files88.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files89.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files8.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files90.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files91.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files92.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files93.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files94.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files95.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files96.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files97.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files98.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files99.data[[:digit:]][[:digit:]]
+-rw-rw-r--. 1 admin admin    0 Jan 14 16:51 files9.data[[:digit:]][[:digit:]]
+```
+
+## 6.2 Скопируйте 34 файла в tread0 и по 33 в tread1 и tread2 соответственно.
+```bash
+[admin@localhost ~]$ cp -v {new/files{1..34}.*,in-process/tread0} && cp -v {new/files{35..68}.*,in-process/tread1} && cp -v {new/files{69..100}.*,in-process/tread2}
+‘new/files1.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files1.data[[:digit:]][[:digit:]]’
+‘new/files2.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files2.data[[:digit:]][[:digit:]]’
+‘new/files3.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files3.data[[:digit:]][[:digit:]]’
+‘new/files4.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files4.data[[:digit:]][[:digit:]]’
+‘new/files5.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files5.data[[:digit:]][[:digit:]]’
+‘new/files6.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files6.data[[:digit:]][[:digit:]]’
+‘new/files7.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files7.data[[:digit:]][[:digit:]]’
+‘new/files8.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files8.data[[:digit:]][[:digit:]]’
+‘new/files9.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files9.data[[:digit:]][[:digit:]]’
+‘new/files10.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files10.data[[:digit:]][[:digit:]]’
+‘new/files11.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files11.data[[:digit:]][[:digit:]]’
+‘new/files12.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files12.data[[:digit:]][[:digit:]]’
+‘new/files13.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files13.data[[:digit:]][[:digit:]]’
+‘new/files14.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files14.data[[:digit:]][[:digit:]]’
+‘new/files15.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files15.data[[:digit:]][[:digit:]]’
+‘new/files16.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files16.data[[:digit:]][[:digit:]]’
+‘new/files17.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files17.data[[:digit:]][[:digit:]]’
+‘new/files18.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files18.data[[:digit:]][[:digit:]]’
+‘new/files19.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files19.data[[:digit:]][[:digit:]]’
+‘new/files20.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files20.data[[:digit:]][[:digit:]]’
+‘new/files21.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files21.data[[:digit:]][[:digit:]]’
+‘new/files22.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files22.data[[:digit:]][[:digit:]]’
+‘new/files23.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files23.data[[:digit:]][[:digit:]]’
+‘new/files24.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files24.data[[:digit:]][[:digit:]]’
+‘new/files25.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files25.data[[:digit:]][[:digit:]]’
+‘new/files26.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files26.data[[:digit:]][[:digit:]]’
+‘new/files27.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files27.data[[:digit:]][[:digit:]]’
+‘new/files28.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files28.data[[:digit:]][[:digit:]]’
+‘new/files29.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files29.data[[:digit:]][[:digit:]]’
+‘new/files30.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files30.data[[:digit:]][[:digit:]]’
+‘new/files31.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files31.data[[:digit:]][[:digit:]]’
+‘new/files32.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files32.data[[:digit:]][[:digit:]]’
+‘new/files33.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files33.data[[:digit:]][[:digit:]]’
+‘new/files34.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread0/files34.data[[:digit:]][[:digit:]]’
+‘new/files35.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files35.data[[:digit:]][[:digit:]]’
+‘new/files36.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files36.data[[:digit:]][[:digit:]]’
+‘new/files37.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files37.data[[:digit:]][[:digit:]]’
+‘new/files38.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files38.data[[:digit:]][[:digit:]]’
+‘new/files39.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files39.data[[:digit:]][[:digit:]]’
+‘new/files40.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files40.data[[:digit:]][[:digit:]]’
+‘new/files41.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files41.data[[:digit:]][[:digit:]]’
+‘new/files42.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files42.data[[:digit:]][[:digit:]]’
+‘new/files43.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files43.data[[:digit:]][[:digit:]]’
+‘new/files44.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files44.data[[:digit:]][[:digit:]]’
+‘new/files45.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files45.data[[:digit:]][[:digit:]]’
+‘new/files46.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files46.data[[:digit:]][[:digit:]]’
+‘new/files47.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files47.data[[:digit:]][[:digit:]]’
+‘new/files48.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files48.data[[:digit:]][[:digit:]]’
+‘new/files49.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files49.data[[:digit:]][[:digit:]]’
+‘new/files50.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files50.data[[:digit:]][[:digit:]]’
+‘new/files51.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files51.data[[:digit:]][[:digit:]]’
+‘new/files52.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files52.data[[:digit:]][[:digit:]]’
+‘new/files53.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files53.data[[:digit:]][[:digit:]]’
+‘new/files54.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files54.data[[:digit:]][[:digit:]]’
+‘new/files55.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files55.data[[:digit:]][[:digit:]]’
+‘new/files56.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files56.data[[:digit:]][[:digit:]]’
+‘new/files57.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files57.data[[:digit:]][[:digit:]]’
+‘new/files58.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files58.data[[:digit:]][[:digit:]]’
+‘new/files59.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files59.data[[:digit:]][[:digit:]]’
+‘new/files60.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files60.data[[:digit:]][[:digit:]]’
+‘new/files61.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files61.data[[:digit:]][[:digit:]]’
+‘new/files62.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files62.data[[:digit:]][[:digit:]]’
+‘new/files63.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files63.data[[:digit:]][[:digit:]]’
+‘new/files64.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files64.data[[:digit:]][[:digit:]]’
+‘new/files65.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files65.data[[:digit:]][[:digit:]]’
+‘new/files66.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files66.data[[:digit:]][[:digit:]]’
+‘new/files67.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files67.data[[:digit:]][[:digit:]]’
+‘new/files68.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread1/files68.data[[:digit:]][[:digit:]]’
+‘new/files69.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files69.data[[:digit:]][[:digit:]]’
+‘new/files70.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files70.data[[:digit:]][[:digit:]]’
+‘new/files71.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files71.data[[:digit:]][[:digit:]]’
+‘new/files72.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files72.data[[:digit:]][[:digit:]]’
+‘new/files73.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files73.data[[:digit:]][[:digit:]]’
+‘new/files74.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files74.data[[:digit:]][[:digit:]]’
+‘new/files75.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files75.data[[:digit:]][[:digit:]]’
+‘new/files76.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files76.data[[:digit:]][[:digit:]]’
+‘new/files77.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files77.data[[:digit:]][[:digit:]]’
+‘new/files78.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files78.data[[:digit:]][[:digit:]]’
+‘new/files79.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files79.data[[:digit:]][[:digit:]]’
+‘new/files80.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files80.data[[:digit:]][[:digit:]]’
+‘new/files81.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files81.data[[:digit:]][[:digit:]]’
+‘new/files82.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files82.data[[:digit:]][[:digit:]]’
+‘new/files83.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files83.data[[:digit:]][[:digit:]]’
+‘new/files84.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files84.data[[:digit:]][[:digit:]]’
+‘new/files85.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files85.data[[:digit:]][[:digit:]]’
+‘new/files86.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files86.data[[:digit:]][[:digit:]]’
+‘new/files87.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files87.data[[:digit:]][[:digit:]]’
+‘new/files88.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files88.data[[:digit:]][[:digit:]]’
+‘new/files89.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files89.data[[:digit:]][[:digit:]]’
+‘new/files90.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files90.data[[:digit:]][[:digit:]]’
+‘new/files91.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files91.data[[:digit:]][[:digit:]]’
+‘new/files92.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files92.data[[:digit:]][[:digit:]]’
+‘new/files93.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files93.data[[:digit:]][[:digit:]]’
+‘new/files94.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files94.data[[:digit:]][[:digit:]]’
+‘new/files95.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files95.data[[:digit:]][[:digit:]]’
+‘new/files96.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files96.data[[:digit:]][[:digit:]]’
+‘new/files97.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files97.data[[:digit:]][[:digit:]]’
+‘new/files98.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files98.data[[:digit:]][[:digit:]]’
+‘new/files99.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files99.data[[:digit:]][[:digit:]]’
+‘new/files100.data[[:digit:]][[:digit:]]’ -> ‘in-process/tread2/files100.data[[:digit:]][[:digit:]]’
+```
+
+## 6.3 Выведете содержимое каталога in-process одной командой
+```bash
+[admin@localhost ~]$ ls -R in-process
+in-process:
+tread0  tread1  tread2
+
+in-process/tread0:
+files10.data[[:digit:]][[:digit:]]  files21.data[[:digit:]][[:digit:]]  files32.data[[:digit:]][[:digit:]]
+files11.data[[:digit:]][[:digit:]]  files22.data[[:digit:]][[:digit:]]  files33.data[[:digit:]][[:digit:]]
+files12.data[[:digit:]][[:digit:]]  files23.data[[:digit:]][[:digit:]]  files34.data[[:digit:]][[:digit:]]
+files13.data[[:digit:]][[:digit:]]  files24.data[[:digit:]][[:digit:]]  files3.data[[:digit:]][[:digit:]]
+files14.data[[:digit:]][[:digit:]]  files25.data[[:digit:]][[:digit:]]  files4.data[[:digit:]][[:digit:]]
+files15.data[[:digit:]][[:digit:]]  files26.data[[:digit:]][[:digit:]]  files5.data[[:digit:]][[:digit:]]
+files16.data[[:digit:]][[:digit:]]  files27.data[[:digit:]][[:digit:]]  files6.data[[:digit:]][[:digit:]]
+files17.data[[:digit:]][[:digit:]]  files28.data[[:digit:]][[:digit:]]  files7.data[[:digit:]][[:digit:]]
+files18.data[[:digit:]][[:digit:]]  files29.data[[:digit:]][[:digit:]]  files8.data[[:digit:]][[:digit:]]
+files19.data[[:digit:]][[:digit:]]  files2.data[[:digit:]][[:digit:]]   files9.data[[:digit:]][[:digit:]]
+files1.data[[:digit:]][[:digit:]]   files30.data[[:digit:]][[:digit:]]
+files20.data[[:digit:]][[:digit:]]  files31.data[[:digit:]][[:digit:]]
+
+in-process/tread1:
+files35.data[[:digit:]][[:digit:]]  files47.data[[:digit:]][[:digit:]]  files59.data[[:digit:]][[:digit:]]
+files36.data[[:digit:]][[:digit:]]  files48.data[[:digit:]][[:digit:]]  files60.data[[:digit:]][[:digit:]]
+files37.data[[:digit:]][[:digit:]]  files49.data[[:digit:]][[:digit:]]  files61.data[[:digit:]][[:digit:]]
+files38.data[[:digit:]][[:digit:]]  files50.data[[:digit:]][[:digit:]]  files62.data[[:digit:]][[:digit:]]
+files39.data[[:digit:]][[:digit:]]  files51.data[[:digit:]][[:digit:]]  files63.data[[:digit:]][[:digit:]]
+files40.data[[:digit:]][[:digit:]]  files52.data[[:digit:]][[:digit:]]  files64.data[[:digit:]][[:digit:]]
+files41.data[[:digit:]][[:digit:]]  files53.data[[:digit:]][[:digit:]]  files65.data[[:digit:]][[:digit:]]
+files42.data[[:digit:]][[:digit:]]  files54.data[[:digit:]][[:digit:]]  files66.data[[:digit:]][[:digit:]]
+files43.data[[:digit:]][[:digit:]]  files55.data[[:digit:]][[:digit:]]  files67.data[[:digit:]][[:digit:]]
+files44.data[[:digit:]][[:digit:]]  files56.data[[:digit:]][[:digit:]]  files68.data[[:digit:]][[:digit:]]
+files45.data[[:digit:]][[:digit:]]  files57.data[[:digit:]][[:digit:]]
+files46.data[[:digit:]][[:digit:]]  files58.data[[:digit:]][[:digit:]]
+
+in-process/tread2:
+files100.data[[:digit:]][[:digit:]]  files78.data[[:digit:]][[:digit:]]  files89.data[[:digit:]][[:digit:]]
+files68.data[[:digit:]][[:digit:]]   files79.data[[:digit:]][[:digit:]]  files90.data[[:digit:]][[:digit:]]
+files69.data[[:digit:]][[:digit:]]   files80.data[[:digit:]][[:digit:]]  files91.data[[:digit:]][[:digit:]]
+files70.data[[:digit:]][[:digit:]]   files81.data[[:digit:]][[:digit:]]  files92.data[[:digit:]][[:digit:]]
+files71.data[[:digit:]][[:digit:]]   files82.data[[:digit:]][[:digit:]]  files93.data[[:digit:]][[:digit:]]
+files72.data[[:digit:]][[:digit:]]   files83.data[[:digit:]][[:digit:]]  files94.data[[:digit:]][[:digit:]]
+files73.data[[:digit:]][[:digit:]]   files84.data[[:digit:]][[:digit:]]  files95.data[[:digit:]][[:digit:]]
+files74.data[[:digit:]][[:digit:]]   files85.data[[:digit:]][[:digit:]]  files96.data[[:digit:]][[:digit:]]
+files75.data[[:digit:]][[:digit:]]   files86.data[[:digit:]][[:digit:]]  files97.data[[:digit:]][[:digit:]]
+files76.data[[:digit:]][[:digit:]]   files87.data[[:digit:]][[:digit:]]  files98.data[[:digit:]][[:digit:]]
+files77.data[[:digit:]][[:digit:]]   files88.data[[:digit:]][[:digit:]]  files99.data[[:digit:]][[:digit:]]
+```
+
+## 6.4 Переместите все файлы из каталогов tread в processed одной командой
+```bash
+[admin@localhost ~]$ mv -v in-process/tread{0..2}/* processed
+```
+
+## 6.5 Выведете содержимое каталога in-process и processed одной командой
+```bash
+[admin@localhost ~]$ ls -R processed in-process
+in-process:
+tread0  tread1  tread2
+
+in-process/tread0:
+
+in-process/tread1:
+
+in-process/tread2:
+
+processed:
+files100.data[[:digit:]][[:digit:]]  files40.data[[:digit:]][[:digit:]]  files71.data[[:digit:]][[:digit:]]
+files10.data[[:digit:]][[:digit:]]   files41.data[[:digit:]][[:digit:]]  files72.data[[:digit:]][[:digit:]]
+files11.data[[:digit:]][[:digit:]]   files42.data[[:digit:]][[:digit:]]  files73.data[[:digit:]][[:digit:]]
+files12.data[[:digit:]][[:digit:]]   files43.data[[:digit:]][[:digit:]]  files74.data[[:digit:]][[:digit:]]
+files13.data[[:digit:]][[:digit:]]   files44.data[[:digit:]][[:digit:]]  files75.data[[:digit:]][[:digit:]]
+files14.data[[:digit:]][[:digit:]]   files45.data[[:digit:]][[:digit:]]  files76.data[[:digit:]][[:digit:]]
+files15.data[[:digit:]][[:digit:]]   files46.data[[:digit:]][[:digit:]]  files77.data[[:digit:]][[:digit:]]
+files16.data[[:digit:]][[:digit:]]   files47.data[[:digit:]][[:digit:]]  files78.data[[:digit:]][[:digit:]]
+files17.data[[:digit:]][[:digit:]]   files48.data[[:digit:]][[:digit:]]  files79.data[[:digit:]][[:digit:]]
+files18.data[[:digit:]][[:digit:]]   files49.data[[:digit:]][[:digit:]]  files7.data[[:digit:]][[:digit:]]
+files19.data[[:digit:]][[:digit:]]   files4.data[[:digit:]][[:digit:]]   files80.data[[:digit:]][[:digit:]]
+files1.data[[:digit:]][[:digit:]]    files50.data[[:digit:]][[:digit:]]  files81.data[[:digit:]][[:digit:]]
+files20.data[[:digit:]][[:digit:]]   files51.data[[:digit:]][[:digit:]]  files82.data[[:digit:]][[:digit:]]
+files21.data[[:digit:]][[:digit:]]   files52.data[[:digit:]][[:digit:]]  files83.data[[:digit:]][[:digit:]]
+files22.data[[:digit:]][[:digit:]]   files53.data[[:digit:]][[:digit:]]  files84.data[[:digit:]][[:digit:]]
+files23.data[[:digit:]][[:digit:]]   files54.data[[:digit:]][[:digit:]]  files85.data[[:digit:]][[:digit:]]
+files24.data[[:digit:]][[:digit:]]   files55.data[[:digit:]][[:digit:]]  files86.data[[:digit:]][[:digit:]]
+files25.data[[:digit:]][[:digit:]]   files56.data[[:digit:]][[:digit:]]  files87.data[[:digit:]][[:digit:]]
+files26.data[[:digit:]][[:digit:]]   files57.data[[:digit:]][[:digit:]]  files88.data[[:digit:]][[:digit:]]
+files27.data[[:digit:]][[:digit:]]   files58.data[[:digit:]][[:digit:]]  files89.data[[:digit:]][[:digit:]]
+files28.data[[:digit:]][[:digit:]]   files59.data[[:digit:]][[:digit:]]  files8.data[[:digit:]][[:digit:]]
+files29.data[[:digit:]][[:digit:]]   files5.data[[:digit:]][[:digit:]]   files90.data[[:digit:]][[:digit:]]
+files2.data[[:digit:]][[:digit:]]    files60.data[[:digit:]][[:digit:]]  files91.data[[:digit:]][[:digit:]]
+files30.data[[:digit:]][[:digit:]]   files61.data[[:digit:]][[:digit:]]  files92.data[[:digit:]][[:digit:]]
+files31.data[[:digit:]][[:digit:]]   files62.data[[:digit:]][[:digit:]]  files93.data[[:digit:]][[:digit:]]
+files32.data[[:digit:]][[:digit:]]   files63.data[[:digit:]][[:digit:]]  files94.data[[:digit:]][[:digit:]]
+files33.data[[:digit:]][[:digit:]]   files64.data[[:digit:]][[:digit:]]  files95.data[[:digit:]][[:digit:]]
+files34.data[[:digit:]][[:digit:]]   files65.data[[:digit:]][[:digit:]]  files96.data[[:digit:]][[:digit:]]
+files35.data[[:digit:]][[:digit:]]   files66.data[[:digit:]][[:digit:]]  files97.data[[:digit:]][[:digit:]]
+files36.data[[:digit:]][[:digit:]]   files67.data[[:digit:]][[:digit:]]  files98.data[[:digit:]][[:digit:]]
+files37.data[[:digit:]][[:digit:]]   files68.data[[:digit:]][[:digit:]]  files99.data[[:digit:]][[:digit:]]
+files38.data[[:digit:]][[:digit:]]   files69.data[[:digit:]][[:digit:]]  files9.data[[:digit:]][[:digit:]]
+files39.data[[:digit:]][[:digit:]]   files6.data[[:digit:]][[:digit:]]
+files3.data[[:digit:]][[:digit:]]    files70.data[[:digit:]][[:digit:]]
+```
+
+## 6.6 Сравните количество файлов в каталогах new и processed, если они равны удалите файлы из new
+
+Есть такая идея, если под условием подразумевается if-then
+```bash
+[admin@localhost ~]$ if [ $(ls new | wc -l) -eq $(ls processed | wc -l) ];then rm new/*; fi
 ```
