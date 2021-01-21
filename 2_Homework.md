@@ -15,3 +15,17 @@
       1 Dec - 251 reqs
 ```
 ### 3. Show total amount of data which server has provided for each unique ip (i.e. 100500 bytes for 1.2.3.4; 9001 bytes for 5.4.3.2 and so on)
+```bash
+[root@localhost shared-folder]# awk '{ sum_byte[$1] += $10 } END { for (ip in sum_byte) { print ip, sum_byte[ip]} }' access.log
+23.94.20.157 41916
+95.91.42.30 1654080
+62.28.204.42 14231169
+1.65.209.180 10053208
+156.220.58.189 8907704
+173.44.165.202 41864
+81.16.140.72 1617259
+173.252.107.11 524288
+80.122.6.67 1366942
+51.81.71.215 10439
+....
+```
