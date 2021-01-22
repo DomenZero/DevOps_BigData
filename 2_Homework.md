@@ -32,14 +32,12 @@
 # 2. SED
 ### 2.1 Change all user agents to "lynx"
 ```bash
-[root@localhost shared-folder]# sed 's/["]*[("| )][Mozilla|Mobile Safari|AppleWebKit|Chrome]*[(^/)]/lynx/g' access.log | head -20
-
-13.66.139.0 - - [19/Dec/2020:13:57:26 +0100] "GETlynxindex.php?option=com_phocagallery&view=category&id=1:almhuette-raith&Itemid=53 HTTP/1.1" 200 32653 "-" lynx5.0lynxcompatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" "-"
-157.48.153.185 - - [19/Dec/2020:14:08:06 +0100] "GETlynxapache-log/access.log HTTP/1.1" 200 233 "-" lynx5.0lynxWindows NT 6.3; Win64; x64lynx537.36lynxKHTML, like Geckolynx87.0.4280.88lynx537.36" "-"
-157.48.153.185 - - [19/Dec/2020:14:08:08 +0100] "GETlynxfavicon.ico HTTP/1.1" 404 217 "http://www.almhuette-raith.at/apache-log/access.log" lynx5.0lynxWindows NT 6.3; Win64; x64lynx537.36lynxKHTML, like Geckolynx87.0.4280.88lynx537.36" "-"
-216.244.66.230 - - [19/Dec/2020:14:14:26 +0100] "GETlynxrobots.txt HTTP/1.1" 200 304 "-" lynx5.0lynxcompatible; DotBot/1.1; http://www.opensiteexplorer.org/dotbot, help@moz.com)" "-"
-54.36.148.92 - - [19/Dec/2020:14:16:44 +0100] "GETlynxindex.php?option=com_phocagallery&view=category&id=2%3Awinterfotos&Itemid=53 HTTP/1.1" 200 30662 "-" lynx5.0lynxcompatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)" "-"
-92.101.35.224 - - [19/Dec/2020:14:29:21 +0100] "GETlynxadministrator/index.php HTTP/1.1" 200 4263 "" lynx4.0lynxcompatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)" "-"
+[root@localhost shared-folder]# sed 's/["]*[("| )][Mozilla|Mobile Safari|AppleWebKit|Chrome]*[(^/)]/lynx/2pg' access.log | head -5
+13.66.139.0 - - [19/Dec/2020:13:57:26 +0100] "GET /index.php?option=com_phocagallery&view=category&id=1:almhuette-raith&Itemid=53 HTTP/1.1" 200 32653 "-" lynx5.0lynxcompatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" "-"
+13.66.139.0 - - [19/Dec/2020:13:57:26 +0100] "GET /index.php?option=com_phocagallery&view=category&id=1:almhuette-raith&Itemid=53 HTTP/1.1" 200 32653 "-" lynx5.0lynxcompatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" "-"
+157.48.153.185 - - [19/Dec/2020:14:08:06 +0100] "GET /apache-log/access.log HTTP/1.1" 200 233 "-" lynx5.0lynxWindows NT 6.3; Win64; x64lynx537.36lynxKHTML, like Geckolynx87.0.4280.88lynx537.36" "-"
+157.48.153.185 - - [19/Dec/2020:14:08:06 +0100] "GET /apache-log/access.log HTTP/1.1" 200 233 "-" lynx5.0lynxWindows NT 6.3; Win64; x64lynx537.36lynxKHTML, like Geckolynx87.0.4280.88lynx537.36" "-"
+157.48.153.185 - - [19/Dec/2020:14:08:08 +0100] "GET /favicon.ico HTTP/1.1" 404 217 "http://www.almhuette-raith.at/apache-log/access.log" lynx5.0lynxWindows NT 6.3; Win64; x64lynx537.36lynxKHTML, like Geckolynx87.0.4280.88lynx537.36" "-"
 ```
 ### 2.2 Masquerade all ip addresses. For example, 1.2.3.4 becomes "ip1", 3.4.5.6 becomse "ip2" and so on. Rewrite file.
 ```bash
