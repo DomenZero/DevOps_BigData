@@ -6,13 +6,7 @@
 ```
 ### 1.2 Show number of requests per month for ip 95.108.129.196 (for example: Sep 2016 - 100500 reqs, Oct 2016 - 0 reqs, Nov 2016 - 2 reqs...)
 ```bash
-[root@localhost shared-folder]# grep 193.106.31.130 access.log | awk -F[:\ ] '{print $4}' | sort | uniq -c | sort -nr | awk -F[/] '{print $2, $1}' | awk -F' ' '{print $1, "- " $2 " reqs"}' | uniq -c
-      4 Dec - 1757 reqs
-     12 Jan - 1757 reqs
-      2 Dec - 1506 reqs
-      7 Jan - 1506 reqs
-      1 Jan - 1255 reqs
-      1 Dec - 251 reqs
+grep 193.106.31.130 access.log | awk -F[:\ ] '{print $4}' | awk -F[/] '{print $2, $1}' | awk -F' ' '{print $1, "- " $2 " reqs"}'| awk -F, '$1 {/Jan/ a[$2]++; /Dec/ b[$2]++; /Feb/ c[$2]++ }END{ for (i in a) print i,a[i], b[i], c[i]}'
 ```
 ### 1.3 Show total amount of data which server has provided for each unique ip (i.e. 100500 bytes for 1.2.3.4; 9001 bytes for 5.4.3.2 and so on)
 ```bash
