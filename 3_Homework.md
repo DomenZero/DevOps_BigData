@@ -143,27 +143,39 @@ scotlandyard:x:4003:lestrade,gregson,jones
 [root@localhost home]# ls -ld /share/cases
 drwxrws---. 2 root bakerstreet 45 Jan 25 22:14 /share/cases
 
+[root@localhost ~]# setfacl -dm g:scotlandyard:rwx /share/cases
+[root@localhost ~]# su lestrade
+[lestrade@localhost root]$ cd /share/cases
+[lestrade@localhost cases]$ exit
+exit
+[root@localhost ~]# setfacl -dm u:jones:rx /share/cases
+[root@localhost ~]# su jones
+[jones@localhost root]$ cd /share/cases
+
 [root@localhost /]# getfacl share/cases
 # file: share/cases
 # owner: root
 # group: bakerstreet
-# flags: sst
+# flags: ss-
 user::rwx
-user:jones:r--
+user:jones:r-x
 group::rwx
-group:scotlandyard:rw-
+group:scotlandyard:rwx
 mask::rwx
 other::---
-
+default:user::rwx
+default:user:jones:r-x
+default:group::rwx
+default:group:scotlandyard:rwx
+default:mask::rwx
+default:other::---
 
 # если файлы были созданы ранее и не унаследовали
 [root@localhost /]# getfacl /home/share/cases | setfacl -M- /home/share/cases/murders.txt
 [root@localhost /]# getfacl /home/share/cases | setfacl -M- /home/share/cases/moriarty.txt
 [root@localhost /]# ls -l /share/cases
-total 4
--rwxrwx---+ 1 root bakerstreet 4 Jan 25 23:28 moriarty.txt
--rwxrwx---+ 1 root bakerstreet 0 Jan 25 22:14 murders.txt
-
-
+total 8
+-rwxrwx--T+ 1 root bakerstreet  4 Jan 25 23:28 moriarty.txt
+-rwxrwx--T+ 1 root bakerstreet 13 Jan 30 01:17 murders.txt
 
 ```
