@@ -250,7 +250,41 @@ Hello Cron
 
 # 4. lsof
 ### 4.1. Run a sleep command, redirect stdout and stderr into two different files (both of them will be empty).
+```bash
+[root@localhost ~]# cat /path/redir.sh
+sleep 60
 
+[root@localhost ~]# /path/redir.sh & 3>&1 1>/path/stdout.log 2>&3- | tee -a /path/stderr.log
+```
 ### 4.2. Find with the lsof command which files this process uses, also find out where it gets stdout from.
+```bash
+[root@localhost ~]# lsof -p 1387
+COMMAND  PID USER   FD   TYPE DEVICE  SIZE/OFF     NODE NAME
+bash    1387 root  cwd    DIR  253,0       204 33575009 /root
+bash    1387 root  rtd    DIR  253,0       249       96 /
+bash    1387 root  txt    REG  253,0    964536 50548564 /usr/bin/bash
+bash    1387 root  mem    REG  253,0 106172832 50548555 /usr/lib/locale/locale-archive
+bash    1387 root  mem    REG  253,0     61560    15723 /usr/lib64/libnss_files-2.17.so
+bash    1387 root  mem    REG  253,0   2156272    15705 /usr/lib64/libc-2.17.so
+bash    1387 root  mem    REG  253,0     19248    15711 /usr/lib64/libdl-2.17.so
+bash    1387 root  mem    REG  253,0    174576    16066 /usr/lib64/libtinfo.so.5.9
+bash    1387 root  mem    REG  253,0    163312    15698 /usr/lib64/ld-2.17.so
+bash    1387 root  mem    REG  253,0     26970    16035 /usr/lib64/gconv/gconv-modules.cache
+bash    1387 root    0u   CHR  136,0       0t0        3 /dev/pts/0
+bash    1387 root    1u   CHR  136,0       0t0        3 /dev/pts/0
+bash    1387 root    2u   CHR  136,0       0t0        3 /dev/pts/0
+bash    1387 root  254r   REG  253,0         9     1950 /path/redir.sh
+bash    1387 root  255u   CHR  136,0       0t0        3 /dev/pts/0
+[root@localhost ~]# lsof -i :1
+[1]+  Done                    /path/redir.sh
+[root@localhost ~]# lsof | grep redir
+bash      1374         root  254r      REG              253,0         9       1950 /path/redir.sh
 
+```
 ### 4.3. List all ESTABLISHED TCP connections ONLY with lsof
+```bash
+[root@localhost ~]# lsof -i tcp -s tcp:ESTABLISHED
+COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd    1277 root    3u  IPv4  18585      0t0  TCP localhost.localdomain:ssh->192.168.0.116:50554 (ESTABLISHED)
+sshd    1281 root    3u  IPv4  18649      0t0  TCP localhost.localdomain:ssh->192.168.0.116:50555 (ESTABLISHED)
+```
