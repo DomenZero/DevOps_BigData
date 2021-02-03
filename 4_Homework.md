@@ -8,9 +8,8 @@
 ### 1.2. Send a SIGSTOP signal to all of them in three different ways.
 ```bash
 [jones@localhost share]$ sleep 2m >/dev/null &
-[1] 1886
-[jones@localhost share]$ ps aux | awk '/sleep/{print $2}' | xargs kill -19
-kill: sending signal to 1883 failed: No such process
+[1] 1666
+[jones@localhost share]$ ps -p 1666 -o pid= | xargs kill -19
 
 [1]+  Stopped                 sleep 2m > /dev/null
 [jones@localhost share]$ sleep 2m >/dev/null &
@@ -31,16 +30,16 @@ jones     1786  0.0  0.1 112808   968 pts/0    R+   23:29   0:00 grep --color=au
 ```
 ### 1.3. Check their statuses with a job command
 ```bash
-[jones@localhost share]$ pmap 1870
-[1]+  Done                    sleep 2m > /dev/null
+[root@localhost ~]# ps -Flww -p 1724
+F S UID        PID  PPID  C PRI  NI ADDR SZ WCHAN    RSS PSR STIME TTY          TIME CMD
+0 S root      1724  1613  0  80   0 - 27013 hrtime   356   0 22:56 pts/1    00:00:00 sleep 2m
 ```
 ### 1.4. Terminate one of them. (Any)
 ```bash
-[jones@localhost share]$ ps aux | awk '/sleep/{print $2}' | xargs kill -9
-kill: sending signal to 1924 failed: No such process
-[1]   Killed                  sleep 2m > /dev/null
+[root@localhost ~]# kill -9 1798
+[root@localhost ~]# ps -ef | grep 1798
+root      1800  1613  0 23:03 pts/1    00:00:00 grep --color=auto 1798
 [2]-  Killed                  sleep 2m > /dev/null
-[3]+  Killed                  sleep 2m > /dev/null
 ```
 ### 1.5. To other send a SIGCONT in two different ways.
 ```bash
@@ -86,7 +85,7 @@ jones     1967  0.0  0.1 112808   968 pts/0    S+   00:21   0:00  |             
 ```bash
 [root@localhost ~]# cat /usr/bin/scripts/sleep_service.sh
 #!/bin/bash
-sleep 30
+sleep 10
 echo 1 > /tmp/homework
 [root@localhost ~]# sudo touch /etc/systemd/system/sleep-daemon.service
 [root@localhost ~]# sudo chmod +x /etc/systemd/system/sleep-daemon.service
