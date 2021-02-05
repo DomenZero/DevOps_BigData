@@ -122,4 +122,25 @@ Last login: Fri Feb  5 19:41:28 2021 from pppoe.178-66-131-179.dynamic.avangardd
   0   786    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
 Server: nginx/1.16.1
 ```
-
+### 1.9 Open webserver webpage in browser of your Host machine of VirtualBox (Windows, or Mac, or whatever else you use). You may need to setup port forwarding in settings of VirtualBox.
+![5_1_9_Test_Forwarding_to_HomeOS](/images/5_1_9_network_test.jpg)
+#### 1. SSH connection from a SSH_Client to a Web_Server located on a SSH_Server
+```bash
+[admin@localhost root]$ ssh -L 2021:10.0.0.5:80 Maksim_Merkulov@40.68.74.188
+```
+#### 2. Test connection on the SSH_Client
+```bash
+[admin@localhost .ssh]$ curl --head 127.0.0.1:2021 | grep Server
+```
+#### 3. SSH connection from a Home_OS to the Web_Server located on the SSH_Server
+```cmd
+C:\Users\Domen0>ssh -L 2021:127.0.0.1:2021 admin@192.168.0.104
+The authenticity of host '192.168.0.104 (192.168.0.104)' can't be established.
+ECDSA key fingerprint is SHA256:/QcqKs/v0NmQbViHEyPi8Sy3vF7hAeTUJQRXhb8Jn5E.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.0.104' (ECDSA) to the list of known hosts.
+admin@192.168.0.104's password:
+Last login: Fri Feb  5 22:11:52 2021
+[admin@localhost ~]$
+```
+#### 4. Test connection and open a web page on the Home_OS
