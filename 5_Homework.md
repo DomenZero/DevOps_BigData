@@ -76,13 +76,12 @@ Last login: Fri Jan 29 21:10:28 2021 from pppoe.178-66-159-93.dynamic.avangardds
 Host hw_5
     HostName 40.68.74.188
     User Maksim_Merkulov
+    IdentityFile /home/admin/.ssh/hw_5
 
-[admin@localhost root]$ ssh -i /home/admin/.ssh/hw_5 hw_5
-Bad owner or permissions on /home/admin/.ssh/config
 [admin@localhost root]$ ll ~/.ssh/config
 -rw-rw-r--. 1 admin admin 62 Jan 30 00:22 /home/admin/.ssh/config
 [admin@localhost root]$ chmod 0700 ~/.ssh/config
-[admin@localhost root]$ ssh -i /home/admin/.ssh/hw_5 hw_5
+[admin@localhost root]$ ssh hw_5
 Last login: Fri Jan 29 21:20:29 2021 from pppoe.178-66-159-93.dynamic.avangarddsl.ru
 [Maksim_Merkulov@vm-one ~]$ exit
 logout
@@ -92,11 +91,35 @@ logout
 Notice that webserver has a private network IP, so you can access it only from the same network (when you are on remotehost  
 that runs in the same private network). Log out from remotehost.
 ```bash
-[Maksim_Merkulov@vm-one ~]$ lsof -i :80
-[Maksim_Merkulov@vm-one ~]$ sudo lsof -i :80
-[sudo] password for Maksim_Merkulov:
-Maksim_Merkulov is not in the sudoers file.  This incident will be reported.
-[Maksim_Merkulov@vm-one ~]$ curl http://localhost:80
-curl: (7) Failed connect to localhost:80; Connection refused
-вроде как доступа нет глянуть
+[Maksim_Merkulov@vm-one ~]$ curl --head 10.0.0.5:80
+HTTP/1.1 200 OK
+Server: nginx/1.16.1
+Date: Fri, 05 Feb 2021 16:44:18 GMT
+Content-Type: text/html
+Content-Length: 786
+Last-Modified: Tue, 29 May 2018 16:55:02 GMT
+Connection: keep-alive
+ETag: "5b0d85e6-312"
+Accept-Ranges: bytes
+
+[Maksim_Merkulov@vm-one ~]$ curl -ksS --head 10.0.0.5:80 | grep Server
+Server: nginx/1.16.1
+
+# -kss = --insecure --silent --show-error
 ```
+### 1.7. Using SSH setup port forwarding, so that you can reach webserver from your localhost (choose any free local port you like).
+```bash
+[admin@localhost root]$ ssh -L 2021:10.0.0.5:80 Maksim_Merkulov@40.68.74.188
+Password:
+Last login: Fri Feb  5 19:41:28 2021 from pppoe.178-66-131-179.dynamic.avangarddsl.ru
+[Maksim_Merkulov@vm-one ~]$
+```
+### 1.8. Like in 1.6, but on localhost using command line utility verify that localhost and port you have specified act like webserver, returning same result as in 1.6.
+```bash
+[admin@localhost .ssh]$ curl --head 127.0.0.1:2021 | grep Server
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0   786    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+Server: nginx/1.16.1
+```
+
