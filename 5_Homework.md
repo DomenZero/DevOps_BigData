@@ -122,7 +122,7 @@ Last login: Fri Feb  5 19:41:28 2021 from pppoe.178-66-131-179.dynamic.avangardd
   0   786    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
 Server: nginx/1.16.1
 ```
-### 1.9 Open webserver webpage in browser of your Host machine of VirtualBox (Windows, or Mac, or whatever else you use). You may need to setup port forwarding in settings of VirtualBox.
+### 1.9. Open webserver webpage in browser of your Host machine of VirtualBox (Windows, or Mac, or whatever else you use). You may need to setup port forwarding in settings of VirtualBox.
 ![5_1_9_Test_Forwarding_to_HomeOS](/images/5_1_9_network_test.jpg)
 #### 1. SSH connection from a SSH_Client to a Web_Server located on a SSH_Server
 ```bash
@@ -144,3 +144,67 @@ Last login: Fri Feb  5 22:11:52 2021
 [admin@localhost ~]$
 ```
 #### 4. Test connection and open a web page on the Home_OS
+
+# Task 2.
+
+### 2.1 Imagine your localhost has been relocated to Havana. Change the time zone on the localhost to Havana and verify the time zone has been changed properly (may be multiple commands).
+```bash
+[admin@localhost .ssh]$ timedatectl
+      Local time: Fri 2021-02-05 23:57:16 MSK
+  Universal time: Fri 2021-02-05 20:57:16 UTC
+        RTC time: Fri 2021-02-05 23:57:14
+       Time zone: Europe/Moscow (MSK, +0300)
+     NTP enabled: n/a
+NTP synchronized: no
+ RTC in local TZ: no
+      DST active: n/a
+[admin@localhost .ssh]$ timedatectl list-timezones | grep Havana
+America/Havana
+[admin@localhost .ssh]$ sudo timedatectl set-timezone America/Havana
+[admin@localhost .ssh]$ timedatectl
+      Local time: Fri 2021-02-05 15:58:11 CST
+  Universal time: Fri 2021-02-05 20:58:11 UTC
+        RTC time: Fri 2021-02-05 23:58:09
+       Time zone: America/Havana (CST, -0500)
+     NTP enabled: n/a
+NTP synchronized: no
+ RTC in local TZ: no
+      DST active: no
+ Last DST change: DST ended at
+                  Sun 2020-11-01 00:59:59 CDT
+                  Sun 2020-11-01 00:00:00 CST
+ Next DST change: DST begins (the clock jumps one hour forward) at
+                  Sat 2021-03-13 23:59:59 CST
+                  Sun 2021-03-14 01:00:00 CDT
+```
+### 2.2 Find all systemd journal messages on localhost, that were recorded in the last 50 minutes and originate from a system service started with user id 81 (single command).
+```bash
+journalctl -b --since "50 min ago" _UID=81
+
+-b - records from a last boot
+--since - date
+_UID  - User_ID (check like: id -u )
+```
+### 2.3 Configure rsyslogd by adding a rule to the newly created configuration file /etc/rsyslog.d/auth-errors.conf to log all security and authentication messages with the priority alert and higher to the /var/log/auth-errors file. Test the newly added log directive with the logger command (multiple commands).
+```bash
+[admin@localhost rsyslog.d]$ sudo cat auth-errors.conf
+auth,authpriv.*         /var/log/auth-errors
+
+#Test
+
+[admin@localhost rsyslog.d]$ sudo cat /var/log/auth-errors
+Feb  6 00:46:27 localhost sudo: pam_unix(sudo:session): session closed for user root
+Feb  6 00:46:27 localhost polkitd[652]: Unregistered Authentication Agent for unix-process:1807:2068488 (system bus name :1.79, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8) (disconnected from bus)
+Feb  6 00:48:05 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/sbin/ss -tulnp
+Feb  6 00:48:05 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
+Feb  6 00:48:05 localhost sudo: pam_unix(sudo:session): session closed for user root
+Feb  6 00:48:13 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/sbin/ss -tulnp
+Feb  6 00:48:13 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
+Feb  6 00:48:13 localhost sudo: pam_unix(sudo:session): session closed for user root
+Feb  6 00:48:32 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/bin/systemctl status rsyslog
+Feb  6 00:48:32 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
+Feb  6 00:48:32 localhost sudo: pam_unix(sudo:session): session closed for user root
+Feb  6 00:51:13 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/bin/cat /var/log/auth-errors
+Feb  6 00:51:13 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
+
+```
