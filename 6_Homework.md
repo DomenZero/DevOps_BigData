@@ -289,3 +289,63 @@ E..8..@.@......m]..".b.PS...n.q............
 .       .J...'
 ```
 # 4. Найдите номер порта, на котором запущен SSH сервер на хосте: 79.134.223.227 + все открытые порты.
+```bash
+[root@mitnik ~]# sudo nmap -sV -PN -p 22 79.134.223.227
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2021-02-08 00:56 MSK
+Nmap scan report for 79-134-223-227.obit.ru (79.134.223.227)
+Host is up.
+PORT   STATE    SERVICE VERSION
+22/tcp filtered ssh
+
+Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 8.71 seconds
+
+[root@mitnik ~]# sudo nmap -sV -PN -p- 79.134.223.227
+
+```
+
+# 5. Найти сообщение в icmp трафике, который поступает на этот хост (на lo интерфейс и/или 42.88.76.32)
+```bash
+[root@mitnik ~]# sudo ssh -i /home/admin/.ssh/hw_5 student8@45.88.76.32
+The authenticity of host '45.88.76.32 (45.88.76.32)' can't be established.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '45.88.76.32' (ECDSA) to the list of known hosts.
+███████████████████████████
+███████▀▀▀░░░░░░░▀▀▀███████
+████▀░░░░░░░░░░░░░░░░░▀████
+███│░░░░░░░░░░░░░░░░░░░│███
+██▌│░░░░░░░░░░░░░░░░░░░│▐██
+██░└┐░░░░░░░░░░░░░░░░░┌┘░██
+██░░└┐░░░░░░░░░░░░░░░┌┘░░██
+██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██
+██▌░│██████▌░░░▐██████│░▐██
+███░│▐███▀▀░░▄░░▀▀███▌│░███
+██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██
+██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██
+████▄─┘██▌░░░░░░░▐██└─▄████
+█████░░▐█─┬┬┬┬┬┬┬─█▌░░█████
+████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████
+█████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████
+███████▄░░░░░░░░░░░▄███████
+██████████▄▄▄▄▄▄▄██████████
+███████████████████████████
+Linux vpc01 4.19.0-11-amd64 #1 SMP Debian 4.19.146-1 (2020-09-17) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+```
+Нет прав использовать 
+```bash
+student8@vpc01:~$ /usr/sbin/tcpdump -i lo
+tcpdump: lo: You don't have permission to capture on that device
+(socket: Operation not permitted)
+
+student8@vpc01:~$ test/tcpdump -i lo
+tcpdump: lo: You don't have permission to capture on that device
+(socket: Operation not permitted)
+```
