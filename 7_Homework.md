@@ -180,13 +180,38 @@ Yes, this is my favourite word! Thank you, bye! CentOS
 ```
 ### 4. As bash doesn't have any syntax standardisation a lot of bash users develop scripts that make further readers very unhappy. Also, these guys often over 
 engineers such scripts. This is an example of this script. Please analyse a script and try to make it as readable and functional as possible from your sense of beauty.
-
+```bash
+export SUM=0;
+for f in $(find src -name "*.java");
+    do 
+        export SUM=$(($SUM + $(wc -l $f | awk '{ print $1 }')));    
+    done; 
+echo $SUM
+```
 ### 5. `stat` command shows when a particular file was accessed. Unfortunately, it can't show who it was. 
 As a first step, you should study a Shell Variables section of man bash, enable an unlimited history size and time stamping of command execution.
 As a second step*, provide a script that will get list of files as arguments, it should find a user who have last accessed each file and print a line in the following fashion `<filename> <user> <time>` and color it red if file was not just accessed but also modified.
 __Note:__ this task is not about the development of an audit tool but about some play with bash. %)
 \* Second step of a task may be treated as difficult and is optional
+```bash
+[root@mitnik bash_test]# cat ~/.bashrc
+cat ~/.bashrc
+# .bashrc
 
+# User specific aliases and functions
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+export HISTFILESIZE=
+export HISTSIZE=
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+```
 # RegEx
 ### 1. Write a sed one-liner that will show stack traces lines in the following fashion:
 
