@@ -190,9 +190,8 @@ echo $SUM
 ```
 ### 5. `stat` command shows when a particular file was accessed. Unfortunately, it can't show who it was. 
 As a first step, you should study a Shell Variables section of man bash, enable an unlimited history size and time stamping of command execution.
-As a second step*, provide a script that will get list of files as arguments, it should find a user who have last accessed each file and print a line in the following fashion `<filename> <user> <time>` and color it red if file was not just accessed but also modified.
-__Note:__ this task is not about the development of an audit tool but about some play with bash. %)
-\* Second step of a task may be treated as difficult and is optional
+*Solution
+Added HISTFILESIZE and HISTSIZE
 ```bash
 [root@mitnik bash_test]# cat ~/.bashrc
 cat ~/.bashrc
@@ -216,3 +215,11 @@ fi
 ### 1. Write a sed one-liner that will show stack traces lines in the following fashion:
 
 ### 2. Write a RegEx that validates entries under `/etc/passwd`.
+```regex
+/^[a-z0-9-]*[$]?:[^:]?:[0-9]+:[0-9]+:[^:]*:[^:]*:[^:]*$/
+```
+
+### 3. Write a RegEx that will validate URI:
+```regex
+/(http|https):\/\/[\w]+(\.(\w+).+(\/|))+(\w|\/)?/
+```
