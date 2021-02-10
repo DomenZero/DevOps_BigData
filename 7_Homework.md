@@ -133,7 +133,51 @@ Lucky 7000
 ```
 ### 3.  Write a script that takes a list of words (or even phrases) as an arguments. 
 Script should ask a user to write something to stdin until user won't provide one of argument phrases.
+```bash 
+#!/bin/bash -x
 
+declare -a StringArray=("Linux" "CentOS" "Windows" "Ubuntu" "Debian" )
+check=0
+while [ $check != 1 ]; do
+        read -p 'Enter my favourite word or phrase: ' line
+        for word in ${StringArray[@]}; do
+                if [[ $word == $line ]]; then
+                        check=1;
+                        echo "Yes, this is my favourite word! Thank you, bye! $word";
+                        break;
+                else
+                        echo "No, it's not what I want!"
+                fi
+        done
+        if [[ check -eq 1 ]]; then
+                break;
+                end
+        fi
+done
+```
+```bash
+Test
+
+[root@mitnik bash_test]# ./3.sh
++ StringArray=("Linux" "CentOS" "Windows" "Ubuntu" "Debian")
++ declare -a StringArray
++ check=0
++ '[' 0 '!=' 1 ']'
++ read -p 'Enter my favourite word or phrase: ' line
+Enter my favourite word or phrase: CentOS
++ for word in '${StringArray[@]}'
++ [[ Linux == CentOS ]]
++ echo 'No, it'\''s not what I want!'
+No, it's not what I want!
++ for word in '${StringArray[@]}'
++ [[ CentOS == CentOS ]]
++ check=1
++ echo 'Yes, this is my favourite word! Thank you, bye! CentOS'
+Yes, this is my favourite word! Thank you, bye! CentOS
++ break
++ [[ check -eq 1 ]]
++ break
+```
 ### 4. As bash doesn't have any syntax standardisation a lot of bash users develop scripts that make further readers very unhappy. Also, these guys often over 
 engineers such scripts. This is an example of this script. Please analyse a script and try to make it as readable and functional as possible from your sense of beauty.
 
