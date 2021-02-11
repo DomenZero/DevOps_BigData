@@ -205,10 +205,50 @@ rm: remove regular file ‘file_task16.txt’? y
 Hello
 World
 ```
-* Создать именованный пайп pipe01
-В первом терминале запустить считывание с pipe01 (любым способом, можно перечислить несколько)
-Создать софтлинк на пайп, назвать его pipe01-s
-Во втором терминале отправить в pipe01-s данные (любым способом, можно перечислить несколько)
-Убедиться, что данные были считаны первым терминалом
-# mkfifo
-** Сделать то же самое, используя файл Unix socket (подсказка: используйте пакеты netcat и socat)
+### Создать именованный пайп pipe01
+```bash
+[root@mitnik new_lib_mlocate]# mkfifo pipe01
+[root@mitnik new_lib_mlocate]# ls -la
+total 744
+drwxr-xr-x. 2 root root        38 Feb 11 23:56 .
+dr-xr-x---. 7 root root      4096 Feb 11 23:32 ..
+-rw-r-----. 1 root slocate 755518 Feb 11 23:14 mlocate.db
+prw-r--r--. 1 root root         0 Feb 11 23:56 pipe01
+```
+### В первом терминале запустить считывание с pipe01 (любым способом, можно перечислить несколько)
+```bash
+[root@mitnik new_lib_mlocate]# cat pipe01&
+[1] 4760
+[root@mitnik new_lib_mlocate]# ps
+  PID TTY          TIME CMD
+ 2997 pts/0    00:00:00 bash
+ 4760 pts/0    00:00:00 cat
+ 5164 pts/0    00:00:00 ps
+```
+### Создать софтлинк на пайп, назвать его pipe01-s
+```bash
+[root@mitnik new_lib_mlocate]# ln -s pipe01 pipe01-s
+[root@mitnik new_lib_mlocate]# ls -la
+total 744
+drwxr-xr-x. 2 root root        54 Feb 12 00:14 .
+dr-xr-x---. 7 root root      4096 Feb 11 23:32 ..
+-rw-r-----. 1 root slocate 755518 Feb 11 23:14 mlocate.db
+prw-r--r--. 1 root root         0 Feb 11 23:56 pipe01
+lrwxrwxrwx. 1 root root         6 Feb 12 00:14 pipe01-s -> pipe0
+```
+### Во втором терминале отправить в pipe01-s данные (любым способом, можно перечислить несколько)
+```bash
+[root@mitnik new_lib_mlocate]# echo HELLO_PIPE > pipe01-s
+```
+### Убедиться, что данные были считаны первым терминалом
+![8_Test_Pipe](/images/8_pipe.jpg)
+### Сделать то же самое, используя файл Unix socket (подсказка: используйте пакеты netcat и socat)
+```bash
+# Terminal 1
+[root@mitnik new_lib_mlocate]# socat -u pipe:pipe01-s STDOUT
+HELLO_PIPE
+
+# Terminal 2
+echo HELLO_PIPE > pipe01-s
+```
+![8_Test_Pipe](/images/8_pipe_socket.jpg)
