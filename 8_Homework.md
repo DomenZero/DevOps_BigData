@@ -154,12 +154,57 @@ Error: No matching Packages to list
 ```
 # 16. File Systems
 ### Переместить mlocate.db в новое место
+```bash
+[root@mitnik ~]# mv /var/lib/mlocate/mlocate.db ~/new_lib_mlocate
+[root@mitnik ~]# ls -la ~/new_lib_mlocate/
+total 744
+drwxr-xr-x. 2 root root        24 Feb 11 22:50 .
+dr-xr-x---. 7 root root      4096 Feb 11 20:02 ..
+-rw-r-----. 1 root slocate 755501 Feb 11 22:50 mlocate.db
+
+[root@mitnik ~]# cat /var/lib/mlocate/mlocate.db
+cat: /var/lib/mlocate/mlocate.db: No such file or directory
+```
 ### Создать новый файл file_task16.txt с любым содержанием и добавить информацию о нём в новый mlocate.db
+```bash
+[root@mitnik ~]# touch ~/file_task16.txt | echo "Hello" > file_task16.txt
+[root@mitnik ~]# cat file_task16.txt
+Hello
+[root@mitnik ~]# updatedb -o ~/new_lib_mlocate/mlocate.db
+
+[root@mitnik ~]# locate --database ~/new_lib_mlocate/mlocate.db file_task16.txt | grep -i file_task16.txt
+/root/file_task16.txt
+```
 ### Найти файл file_task16.txt через locate и вывести его содержимое на экран (без явного указания полного пути к файлу)
+```bash
+[root@mitnik ~]# locate --database ~/new_lib_mlocate/mlocate.db file_task16.txt | cat file_task16.txt
+Hello
+```
 ### Создать хардлинк на file_task16.txt, назвать его file_task16_hard.txt
+```bash
+[root@mitnik ~]# ln file_task16.txt file_task16_hard.txt
+[root@mitnik ~]# ls -lai | grep 16
+33576103 -rw-r--r--.  2 root root     6 Feb 11 22:53 file_task16_hard.txt
+33576103 -rw-r--r--.  2 root root     6 Feb 11 22:53 file_task16.txt
+```
 ### Внести любые изменения в file_task16.txt
+```bash
+[root@mitnik ~]# echo World >> file_task16.txt
+[root@mitnik ~]# cat file_task16.txt
+Hello
+World
+```
 ### Удалить file_task16.txt
+```bash
+[root@mitnik ~]# rm file_task16.txt
+rm: remove regular file ‘file_task16.txt’? y
+```
 ### Вывести на экран file_task16_hard.txt, убедиться, что в нём отражены изменения
+```bash
+[root@mitnik ~]# cat file_task16_hard.txt
+Hello
+World
+```
 * Создать именованный пайп pipe01
 В первом терминале запустить считывание с pipe01 (любым способом, можно перечислить несколько)
 Создать софтлинк на пайп, назвать его pipe01-s
