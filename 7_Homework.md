@@ -56,7 +56,6 @@ Script should ask a user to write something to stdin until user won't provide on
 ```bash 
 #!/bin/bash -x
 
-# declare -a StringArray=("Linux" "CentOS" "Windows" "Ubuntu" "Debian" )
 declare -a StringArray=($1 $2 $3)
 check=0
 while [ $check != 1 ]; do
