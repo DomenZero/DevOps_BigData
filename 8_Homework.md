@@ -251,4 +251,4 @@ HELLO_PIPE
 # Terminal 2
 echo HELLO_PIPE > pipe01-s
 ```
-![8_Test_Pipe](/images/8_pipe_socket.jpg)
+![8_Test_Pipe_socket](/images/8_pipe_socket.jpg)
