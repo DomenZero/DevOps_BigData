@@ -190,6 +190,7 @@ tmpfs                     93M     0   93M   0% /run/user/0
 [root@mitnik ~]# blkid /dev/sdb2
 /dev/sdb2: UUID="1e73facc-bee3-43e1-8944-b947eeef1421" TYPE="swap" PARTLABEL="Linux_swap" PARTUUID="27f0e504-2c28-4677-a28f-90e813d7d142"
 [root@mitnik ~]# vi /etc/fstab
+....
 UUID="fc9d68ce-6fa4-4c40-90f2-4ecbed65bfd7"             /backup        xfs      defaults        0 0
 UUID="1e73facc-bee3-43e1-8944-b947eeef1421"             swap           swap     defaults        0 0
 
@@ -206,14 +207,217 @@ tmpfs                    464M     0  464M   0% /sys/fs/cgroup
 /dev/sda1               1014M  167M  848M  17% /boot
 /dev/sdb1                1.9G   33M  1.9G   2% /backup
 tmpfs                     93M     0   93M   0% /run/user/0
+[root@mitnik ~]# swapon -s
+Filename                                Type            Size    Used    Priority
+/dev/sdb2                               partition       500256  0       -2
+/dev/dm-1                               partition       2097148 0       -3
 ```
 
 # LVM
 #### 2. LVM. Imagine you're running out of space on your root device. As we found out during the lesson default CentOS installation should already have LVM, means you can easily extend size of your root device. So what are you waiting for? Just do it!
 #### 2.1. Create 2GB partition on /dev/sdc of type "Linux LVM"
+```bash
+(parted) mkpart Linux_LVM
+File system type?  [ext2]? ext4
+Start? 2515MB
+End? 4515MB
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? i
+(parted) print
+Model: Msft Virtual Disk (scsi)
+Disk /dev/sdb: 5369MB
+Sector size (logical/physical): 512B/4096B
+Partition Table: gpt
+Disk Flags:
+
+Number  Start   End     Size    File system     Name              Flags
+ 1      1049kB  2001MB  2000MB  xfs             Linux_filesystem
+ 2      2002MB  2514MB  512MB   linux-swap(v1)  Linux_swap
+ 3      2515MB  4515MB  2000MB                  Linux_LVM
+ 
+(parted) set 3 lvm on
+```
 #### 2.2. Initialize the partition as a physical volume (PV)
+```bash
+[root@mitnik ~]# pvcreate /dev/sdb3
+  Physical volume "/dev/sdb3" successfully created.
+  
+[root@mitnik ~]# pvs
+  PV         VG     Fmt  Attr PSize   PFree
+  /dev/sda2  centos lvm2 a--  <19.00g    0
+  /dev/sdb3         lvm2 ---    1.86g 1.86g
+
+```
 #### 2.3. Extend the volume group (VG) of your root device using your newly created PV
-#### 2.4. Extend your root logical volume (LV) by 1GB, leaving other 1GB unassigned
+```bash
+[root@mitnik ~]# pvcreate /dev/sdb3
+  Can't initialize physical volume "/dev/sdb3" of volume group "vg_new" without -ff
+  /dev/sdb3: physical volume not initialized.
+[root@mitnik ~]# pvcreate -ff /dev/sdb3
+Really INITIALIZE physical volume "/dev/sdb3" of volume group "vg_new" [y/n]? y
+  WARNING: Forcing physical volume creation on /dev/sdb3 of volume group "vg_new"
+  Physical volume "/dev/sdb3" successfully created.
+[root@mitnik ~]# pvs
+  PV         VG     Fmt  Attr PSize   PFree
+  /dev/sda2  centos lvm2 a--  <19.00g    0
+  /dev/sdb3         lvm2 ---    1.86g 1.86g
+[root@mitnik ~]# vgextend centos /dev/sdb3
+  Volume group "centos" successfully extended
+[root@mitnik ~]# pvs
+  PV         VG     Fmt  Attr PSize   PFree
+  /dev/sda2  centos lvm2 a--  <19.00g     0
+  /dev/sdb3  centos lvm2 a--   <1.86g <1.86g
+ [root@mitnik ~]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree
+  centos   2   2   0 wz--n- <20.86g <1.86g
+
+```
+#### 2.4. , leaving other 1GB unassigned
+```bash
+# BEFORE CHANGES 
+[root@mitnik ~]# lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/centos/swap
+  LV Name                swap
+  VG Name                centos
+  LV UUID                YvFxTq-t4Pe-se0j-tuVY-mBPW-f7RU-5AAQ1c
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-01-11 22:11:49 +0300
+  LV Status              available
+  # open                 2
+  LV Size                2.00 GiB
+  Current LE             512
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+
+  --- Logical volume ---
+  LV Path                /dev/centos/root
+  LV Name                root
+  VG Name                centos
+  LV UUID                VjdLT2-KQcq-46wv-tytr-roM6-abUD-YEJwLk
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-01-11 22:11:50 +0300
+  LV Status              available
+  # open                 1
+  LV Size                <17.00 GiB
+  Current LE             4351
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+```
+```bash
+[root@mitnik ~]# vgdisplay
+  --- Volume group ---
+  VG Name               centos
+  System ID
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  4
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               <20.86 GiB
+  PE Size               4.00 MiB
+  Total PE              5339
+  Alloc PE / Size       4863 / <19.00 GiB
+  Free  PE / Size       476 / <1.86 GiB
+  VG UUID               mMGVhz-V5GM-G5SZ-ENQ1-Ad00-P2DG-o0SFXl
+
+[root@mitnik ~]# lvextend -L+1G /dev/centos/root
+  Size of logical volume centos/root changed from <17.00 GiB (4351 extents) to <18.00 GiB (4607 extents).
+  Logical volume centos/root successfully resized.
+
+
+```
 #### 2.5. Check current disk space usage of your root device
+```bash
+[root@mitnik ~]# lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/centos/swap
+  LV Name                swap
+  VG Name                centos
+  LV UUID                YvFxTq-t4Pe-se0j-tuVY-mBPW-f7RU-5AAQ1c
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-01-11 22:11:49 +0300
+  LV Status              available
+  # open                 2
+  LV Size                2.00 GiB
+  Current LE             512
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+
+  --- Logical volume ---
+  LV Path                /dev/centos/root
+  LV Name                root
+  VG Name                centos
+  LV UUID                VjdLT2-KQcq-46wv-tytr-roM6-abUD-YEJwLk
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-01-11 22:11:50 +0300
+  LV Status              available
+  # open                 1
+  LV Size                <18.00 GiB
+  Current LE             4607
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+
+```
 #### 2.6. Extend your root device filesystem to be able to use additional free space of root LV
+```bash
+[root@mitnik ~]# lvextend -i1 -l+100%FREE /dev/centos/root
+  Size of logical volume centos/root changed from <18.00 GiB (4607 extents) to <18.86 GiB (4827 extents).
+  Logical volume centos/root successfully resized.
+
+```
 #### 2.7. Verify that after reboot your root device is still 1GB bigger than at 2.5.
+```bash
+[root@mitnik ~]# lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/centos/swap
+  LV Name                swap
+  VG Name                centos
+  LV UUID                YvFxTq-t4Pe-se0j-tuVY-mBPW-f7RU-5AAQ1c
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-01-11 22:11:49 +0300
+  LV Status              available
+  # open                 2
+  LV Size                2.00 GiB
+  Current LE             512
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+
+  --- Logical volume ---
+  LV Path                /dev/centos/root
+  LV Name                root
+  VG Name                centos
+  LV UUID                VjdLT2-KQcq-46wv-tytr-roM6-abUD-YEJwLk
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-01-11 22:11:50 +0300
+  LV Status              available
+  # open                 1
+  LV Size                <18.86 GiB
+  Current LE             4827
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+```
