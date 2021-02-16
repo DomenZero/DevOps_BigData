@@ -188,23 +188,11 @@ _UID  - User_ID (check like: id -u )
 ### 2.3 Configure rsyslogd by adding a rule to the newly created configuration file /etc/rsyslog.d/auth-errors.conf to log all security and authentication messages with the priority alert and higher to the /var/log/auth-errors file. Test the newly added log directive with the logger command (multiple commands).
 ```bash
 [admin@localhost rsyslog.d]$ sudo cat auth-errors.conf
-auth,authpriv.*         /var/log/auth-errors
+auth,authpriv.alert         /var/log/auth-errors
 
 #Test
 
 [admin@localhost rsyslog.d]$ sudo cat /var/log/auth-errors
-Feb  6 00:46:27 localhost sudo: pam_unix(sudo:session): session closed for user root
-Feb  6 00:46:27 localhost polkitd[652]: Unregistered Authentication Agent for unix-process:1807:2068488 (system bus name :1.79, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8) (disconnected from bus)
-Feb  6 00:48:05 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/sbin/ss -tulnp
-Feb  6 00:48:05 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
-Feb  6 00:48:05 localhost sudo: pam_unix(sudo:session): session closed for user root
-Feb  6 00:48:13 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/sbin/ss -tulnp
-Feb  6 00:48:13 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
-Feb  6 00:48:13 localhost sudo: pam_unix(sudo:session): session closed for user root
-Feb  6 00:48:32 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/bin/systemctl status rsyslog
-Feb  6 00:48:32 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
-Feb  6 00:48:32 localhost sudo: pam_unix(sudo:session): session closed for user root
-Feb  6 00:51:13 localhost sudo:   admin : TTY=pts/0 ; PWD=/etc/rsyslog.d ; USER=root ; COMMAND=/bin/cat /var/log/auth-errors
-Feb  6 00:51:13 localhost sudo: pam_unix(sudo:session): session opened for user root by root(uid=0)
+
 
 ```
