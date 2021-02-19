@@ -379,9 +379,13 @@ Really INITIALIZE physical volume "/dev/sdb3" of volume group "vg_new" [y/n]? y
 ```
 #### 2.6. Extend your root device filesystem to be able to use additional free space of root LV
 ```bash
+[root@mitnik ~]# resize2fs /dev/centos/root
+
+
 [root@mitnik ~]# lvextend -i1 -l+100%FREE /dev/centos/root
   Size of logical volume centos/root changed from <18.00 GiB (4607 extents) to <18.86 GiB (4827 extents).
   Logical volume centos/root successfully resized.
+
 
 ```
 #### 2.7. Verify that after reboot your root device is still 1GB bigger than at 2.5.
