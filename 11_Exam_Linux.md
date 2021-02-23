@@ -2,8 +2,8 @@
 Виртуальные машина Scylla (VM1 – headnote) и Charybdis (VM2 - worker).  
 По 2 дополнительных диска по 5G    
 ![11_Scylla_main](/images/11_Scylla_main.jpg)  
-Например Scylla 
-![11_Scylla_settings](/images/11_Charybdis_main.jpg)
+Например Scylla  
+![11_Scylla_settings](/images/11_Charybdis_main.jpg)  
 # 2. Пользователь exam
 ```bash
 [root@localhost exam]# visudo -f /etc/sudoers
