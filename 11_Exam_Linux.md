@@ -1,9 +1,8 @@
 # 1. Установить CentOS на две виртуальные машины  
 Виртуальные машина Scylla (VM1 – headnote) и Charybdis (VM2 - worker).  
-По 2 дополнительных диска по 5G  
-•	Scylla  
+По 2 дополнительных диска по 5G    
 ![11_Scylla_main](/images/11_Scylla_main.jpg)
-•	Charybdis  
+Напимер Charybdis  
 ![11_Charybdis_main](/images/11_Charybdis_main.jpg)
 # 2. Пользователь exam
 ```bash
