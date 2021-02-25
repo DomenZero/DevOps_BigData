@@ -1,7 +1,6 @@
 # Задача
 Установить, настроить и запустить Hadoop Сore в минимальной конфигурации. Для этого  
-потребуется подготовить 2 виртуальные машины: VM1 - headnode; VM2 - worker. Понимание  
-принципов работы Hadoop и его компонентов для успешной сдачи задания не требуется.  
+потребуется подготовить 2 виртуальные машины: VM1 - headnode; VM2 - worker. 
 # 1. Установить CentOS на две виртуальные машины  
 Виртуальные машина Scylla (VM1 – headnote) и Charybdis (VM2 - worker).  
 • VM1: 2CPU, 2-4G памяти, системный диск на 15-20G и дополнительные 2 диска по 5G
@@ -123,6 +122,12 @@ hadoop : hadoop
 yarn : hadoop
 [exam@localhost ~]$ groups hdfs
 hdfs : hadoop
+
+# Optional: set password
+sudo passwd hadoop
+sudo passwd hdfs
+sudo passwd yarn
+
 ```
 # 8. Создать для обоих дополнительных дисков разделы размером в 100% диска.
 ```bash
@@ -473,12 +478,463 @@ WARNING: ext4 signature detected on /dev/sdc at offset 1080. Wipe it? [y/n]: y
 
 ```
 # 10. Создать две группы LVM и добавить в каждую из них по одному физическому тому из п.9.
+```bash
 
+[exam@localhost ~]$ sudo vgcreate LVM_group1 /dev/sdb
+  Volume group "LVM_group1" successfully created
+[exam@localhost ~]$ sudo vgcreate LVM_group2 /dev/sdc
+  Volume group "LVM_group2" successfully created
+[exam@localhost ~]$ sudo vgdisplay
+  --- Volume group ---
+  VG Name               LVM_group1
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  1
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                0
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <5.00 GiB
+  PE Size               4.00 MiB
+  Total PE              1279
+  Alloc PE / Size       0 / 0
+  Free  PE / Size       1279 / <5.00 GiB
+  VG UUID               FFIQM4-RZJr-IHqL-JZMd-v2xH-0UG2-4QKWOQ
+
+  --- Volume group ---
+  VG Name               LVM_group2
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  1
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                0
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <5.00 GiB
+  PE Size               4.00 MiB
+  Total PE              1279
+  Alloc PE / Size       0 / 0
+  Free  PE / Size       1279 / <5.00 GiB
+  VG UUID               qk1OBf-ZBUl-1j0S-KcNG-QZqr-Mt4s-Mfh1Hs
+
+  --- Volume group ---
+  VG Name               centos
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <19.00 GiB
+  PE Size               4.00 MiB
+  Total PE              4863
+  Alloc PE / Size       4863 / <19.00 GiB
+  Free  PE / Size       0 / 0
+  VG UUID               OxTThu-I0WV-7jje-ilwW-u3yH-l8mn-aeKQg1
+
+```
 # 11. В каждой из групп из п.10 создать логический том LVM размером 100% группы.
+```bash
+[exam@localhost ~]$ sudo lvcreate -l 100%FREE -n log_vol1 LVM_group1
+  Logical volume "log_vol1" created.
+[exam@localhost ~]$ sudo lvcreate -l 100%FREE -n log_vol2 LVM_group2
+  Logical volume "log_vol2" created.
+
+# Test
+[exam@localhost ~]$ sudo lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/LVM_group1/log_vol1
+  LV Name                log_vol1
+  VG Name                LVM_group1
+  LV UUID                ZUnNlz-lcnh-L9qJ-f9hz-a8RM-46vd-YiKowp
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2021-02-25 12:34:07 -0500
+  LV Status              available
+  # open                 0
+  LV Size                <5.00 GiB
+  Current LE             1279
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:2
+
+  --- Logical volume ---
+  LV Path                /dev/LVM_group2/log_vol2
+  LV Name                log_vol2
+  VG Name                LVM_group2
+  LV UUID                9Trumx-Hym3-E2XB-qhch-5JWc-ILW9-ukEX5y
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2021-02-25 12:34:15 -0500
+  LV Status              available
+  # open                 0
+  LV Size                <5.00 GiB
+  Current LE             1279
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:3
+
+  --- Logical volume ---
+  LV Path                /dev/centos/swap
+  LV Name                swap
+  VG Name                centos
+  LV UUID                VUFJnZ-KUSl-CPMW-vaOc-PdMm-CoJs-PgfpKX
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-02-23 09:46:09 -0500
+  LV Status              available
+  # open                 2
+  LV Size                2.00 GiB
+  Current LE             512
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+
+  --- Logical volume ---
+  LV Path                /dev/centos/root
+  LV Name                root
+  VG Name                centos
+  LV UUID                CJFPul-QCGk-y5Sn-Nnia-9MK9-0q3R-fmm2g2
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2021-02-23 09:46:10 -0500
+  LV Status              available
+  # open                 1
+  LV Size                <17.00 GiB
+  Current LE             4351
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+```
 # 12. На каждом логическом томе LVM создать файловую систему ext4.
+```bash
+[exam@localhost ~]$ sudo mkfs.ext4 /dev/LVM_group2/log_vol2
+mke2fs 1.42.9 (28-Dec-2013)
+Discarding device blocks: done
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+327680 inodes, 1309696 blocks
+65484 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=1342177280
+40 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+[exam@localhost ~]$ sudo mkfs.ext4 /dev/LVM_group1/log_vol1
+mke2fs 1.42.9 (28-Dec-2013)
+Discarding device blocks: done
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+327680 inodes, 1309696 blocks
+65484 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=1342177280
+40 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done
+```
 # 13. Создать директории и использовать их в качестве точек монтирования файловых систем из
 п.12:
 • /opt/mount1
 • /opt/mount2
+```bash
+[exam@localhost ~]$ sudo mkdir /opt/mount1 && sudo mount /dev/LVM_group1/log_vol1 /opt/mount1
+[exam@localhost ~]$ sudo mkdir /opt/mount2 && sudo mount /dev/LVM_group2/log_vol2 /opt/mount2
+
+#Test
+[exam@localhost ~]$ df -h
+Filesystem                       Size  Used Avail Use% Mounted on
+devtmpfs                         1.9G     0  1.9G   0% /dev
+tmpfs                            1.9G     0  1.9G   0% /dev/shm
+tmpfs                            1.9G  9.0M  1.9G   1% /run
+tmpfs                            1.9G     0  1.9G   0% /sys/fs/cgroup
+/dev/mapper/centos-root           17G  2.8G   15G  17% /
+/dev/sda1                       1014M  150M  865M  15% /boot
+tmpfs                            379M     0  379M   0% /run/user/1000
+tmpfs                            379M     0  379M   0% /run/user/0
+/dev/mapper/LVM_group1-log_vol1  4.8G   20M  4.6G   1% /opt/mount1
+/dev/mapper/LVM_group2-log_vol2  4.8G   20M  4.6G   1% /opt/mount2
+
+```
 # 14. Настроить систему так, чтобы монтирование происходило автоматически при запуске системы.
 Произвести монтирование новых файловых систем.
+```bash
+[exam@localhost ~]$ lsblk -f
+NAME                  FSTYPE      LABEL UUID                                   MOUNTPOINT
+fd0
+sda
+├─sda1                xfs               fde672d4-4ee8-44f5-bb09-54a16272545f   /boot
+└─sda2                LVM2_member       ui2xxq-kaF8-HYWE-9WN8-7jnM-3deA-25e8Kj
+  ├─centos-root       xfs               50097d23-79a9-4511-a342-3de8994e7fdf   /
+  └─centos-swap       swap              887f08af-e5d8-418b-9001-6451480e1176   [SWAP]
+sdb                   LVM2_member       xnaOVb-URfc-Ythg-53px-be0L-PbJY-ohIlEe
+└─LVM_group1-log_vol1 ext4              523ecdd7-43b0-4fa0-b2ac-0b7a100146eb   /opt/mount1
+sdc                   LVM2_member       HgXZV2-Fu9W-zNr5-wStp-W2R6-P7fg-LacZJy
+└─LVM_group2-log_vol2 ext4              6702c40d-ad44-4721-afa5-929288de7588   /opt/mount2
+
+[exam@localhost ~]$ sudo vi /etc/fstab
+[exam@localhost ~]$ cat /etc/fstab | grep mount
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+UUID=523ecdd7-43b0-4fa0-b2ac-0b7a100146eb /opt/mount1           ext4    defaults        0 0
+UUID=6702c40d-ad44-4721-afa5-929288de7588 /opt/mount2           ext4    defaults        0 0
+
+
+# Для Charybdis (VM2)
+
+[exam@localhost ~]$ lsblk -f
+NAME                  FSTYPE      LABEL UUID                                   MOUNTPOINT
+fd0
+sda
+├─sda1                xfs               574a94c5-efb4-4350-8ecf-50e038d78954   /boot
+└─sda2                LVM2_member       fI0cTK-DbzR-UdCg-q8W1-YtFi-fXQw-gFV3aN
+  ├─centos-root       xfs               f9c8d26f-468f-4481-9c3f-86e3496f8ad0   /
+  └─centos-swap       swap              58608058-1089-404b-80fa-01e62bae8a35   [SWAP]
+sdb                   LVM2_member       O1hpvl-YGMg-qOO8-JQXT-RV2b-lQTI-vwdjLo
+└─LVM_group1-log_vol1 ext4              d35367e7-bc3a-4ae6-a54c-391ad4e33842   /opt/mount1
+sdc                   LVM2_member       pgIcS0-oSny-IodZ-R6JE-5DQC-5ASe-3XEfAl
+└─LVM_group2-log_vol2 ext4              7142c0f6-c76f-49cb-b122-a643de10cd18   /opt/mount2
+[exam@localhost ~]$ cat /etc/fstab | grep mount
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+UUID=d35367e7-bc3a-4ae6-a54c-391ad4e33842 /opt/mount1           ext4    defaults        0 0
+UUID=7142c0f6-c76f-49cb-b122-a643de10cd18 /opt/mount2           ext4    defaults        0 0
+
+```
+# Для VM1 (Scylla) (шаги 15-16):
+#### 15. После монтирования создать 2 директории для хранения файлов Namenode сервиса HDFS:
+• /opt/mount1/namenode-dir  
+• /opt/mount2/namenode-dir  
+```bash
+[exam@localhost ~]$ sudo mkdir /opt/mount1/namenode-dir
+[exam@localhost ~]$ sudo mkdir /opt/mount2/namenode-dir
+```
+#### 16. Сделать пользователя hdfs и группу hadoop владельцами этих директорий.
+```bash
+[exam@localhost ~]$ sudo chown hdfs:hadoop /opt/mount1/namenode-dir
+[exam@localhost ~]$ ls -ld /opt/mount1/namenode-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 13:39 /opt/mount1/namenode-dir
+[exam@localhost ~]$ sudo chown hdfs:hadoop /opt/mount2/namenode-dir
+[exam@localhost ~]$ ls -ld /opt/mount1/namenode-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 13:39 /opt/mount1/namenode-dir
+```
+# Для VM2 (Charybdis) (шаги 17-20):
+#### 17. После монтирования создать 2 директории для хранения файлов Datanode сервиса HDFS:
+• /opt/mount1/datanode-dir  
+• /opt/mount2/datanode-dir  
+```bash
+[exam@localhost ~]$ sudo mkdir /opt/mount1/datanode-dir
+[exam@localhost ~]$ sudo mkdir /opt/mount2/datanode-dir
+```
+#### 18. Сделать пользователя hdfs и группу hadoop владельцами директорий из п.17.
+```bash
+[exam@localhost ~]$ sudo chown hdfs:hadoop /opt/mount1/datanode-dir
+[exam@localhost ~]$ sudo chown hdfs:hadoop /opt/mount2/datanode-dir
+[exam@localhost ~]$ ls -ld /opt/mount1
+drwxr-xr-x. 4 root root 4096 Feb 25 13:57 /opt/mount1
+[exam@localhost ~]$ ls -ld /opt/mount1/datanode-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 13:57 /opt/mount1/datanode-dir
+[exam@localhost ~]$ ls -ld /opt/mount2/datanode-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 13:57 /opt/mount2/datanode-dir
+```
+#### 19. Создать дополнительные 4 директории для Nodemanager сервиса YARN:
+• /opt/mount1/nodemanager-local-dir  
+• /opt/mount2/nodemanager-local-dir  
+• /opt/mount1/nodemanager-log-dir  
+• /opt/mount2/nodemanager-log-dir  
+```bash
+[exam@localhost ~]$ sudo mkdir /opt/mount{1..2}/nodemanager-local-dir && sudo mkdir /opt/mount{1..2}/nodemanager-log-dir
+```
+#### 20. Сделать пользователя yarn и группу hadoop владельцами директорий из п.19.
+```bash
+[exam@localhost ~]$ sudo chown hdfs:hadoop /opt/mount{1..2}/nodemanager-local-dir && sudo chown hdfs:hadoop /opt/mount{1..2}/nodemanager-log-dir
+[exam@localhost ~]$ sudo ls -ld /opt/mount{1..2}/nodemanager-local-dir && sudo ls -ld /opt/mount{1..2}/nodemanager-log-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 14:07 /opt/mount1/nodemanager-local-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 14:07 /opt/mount2/nodemanager-local-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 14:07 /opt/mount1/nodemanager-log-dir
+drwxr-xr-x. 2 hdfs hadoop 4096 Feb 25 14:07 /opt/mount2/nodemanager-log-dir
+```
+# Для обеих машин:
+#### 21. Настроить доступ по SSH, используя ключи для пользователя hadoop.
+```bash
+# Scylla (VM1)
+
+[hadoop@localhost ~]$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/hadoop/.ssh/id_rsa): /home/hadoop/.ssh/hadoop_scylla_key
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/hadoop/.ssh/hadoop_scylla_key.
+Your public key has been saved in /home/hadoop/.ssh/hadoop_scylla_key.pub.
+The key fingerprint is:
+SHA256:FIu0m10GpNA+rNgaJYH52/eDdJmWcYhTp6UZ2vIqBQ0 hadoop@localhost.localdomain
+The key's randomart image is:
++---[RSA 2048]----+
+| o  ....+        |
+|o . Eo.+o+o      |
+| . . =+=oOo      |
+|  o o X=Bo.      |
+|   B oo=S*       |
+|  + + + B        |
+|   o + *         |
+|  . . o o        |
+|     .   .       |
++----[SHA256]-----+
+[hadoop@localhost ~]$ ssh-copy-id -i ~/.ssh/hadoop_scylla_key.pub hadoop@192.168.0.121
+/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/hadoop/.ssh/hadoop_scylla_key.pub"
+The authenticity of host '192.168.0.121 (192.168.0.121)' can't be established.
+ECDSA key fingerprint is SHA256:vBPO74t/K41Hvy7/bbZXJYItqVEe+M+cNPfoek293P8.
+ECDSA key fingerprint is MD5:06:3c:6f:fe:74:19:ef:93:a2:1a:70:c5:0a:b5:c2:8f.
+Are you sure you want to continue connecting (yes/no)? yes
+/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+hadoop@192.168.0.121's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'hadoop@192.168.0.121'"
+and check to make sure that only the key(s) you wanted were added.
+
+[hadoop@localhost ~]$ ssh -i /home/hadoop/.ssh/hadoop_scylla_key hadoop@192.168.0.121
+Last login: Thu Feb 25 14:37:37 2021 from 192.168.0.120
+[hadoop@localhost ~]$ exit
+
+
+# Charybdis (VM2)
+[hadoop@localhost ~]$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/hadoop/.ssh/id_rsa): /home/hadoop/.ssh/hadoop_key
+Created directory '/home/hadoop/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/hadoop/.ssh/hadoop_key.
+Your public key has been saved in /home/hadoop/.ssh/hadoop_key.pub.
+The key fingerprint is:
+SHA256:5vtUEBt9XmK1+5dr3XweUxCY0SJpXnvb2zi6YeFmJr0 hadoop@localhost.localdomain
+The key's randomart image is:
++---[RSA 2048]----+
+|          oo.=...|
+|          ++* =.o|
+|         ooo *.+ |
+|          ... o..|
+|        S   o. +.|
+|       o   + .. =|
+|        . o O  *B|
+|         o * ooo@|
+|        ... Eo.+o|
++----[SHA256]-----+
+
+[hadoop@localhost ~]$ ssh-copy-id -i ~/.ssh/hadoop_key.pub hadoop@192.168.0.120
+/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/hadoop/.ssh/hadoop_key.pub"
+The authenticity of host '192.168.0.120 (192.168.0.120)' can't be established.
+ECDSA key fingerprint is SHA256:4zD+E3eVNkf8KC2u3yoBowfXPnG1Sx7BT/xmYcJ7nCQ.
+ECDSA key fingerprint is MD5:55:fb:bb:36:2d:d3:1d:eb:f5:9a:32:b9:73:e1:0a:ec.
+Are you sure you want to continue connecting (yes/no)? yes
+/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+hadoop@192.168.0.120's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'hadoop@192.168.0.120'"
+and check to make sure that only the key(s) you wanted were added.
+
+[hadoop@localhost ~]$ ssh -i /home/hadoop/.ssh/hadoop_key hadoop@192.168.0.120
+Last login: Thu Feb 25 14:28:02 2021 from 192.168.0.121
+[hadoop@localhost ~]$ exit
+logout
+Connection to 192.168.0.120 closed.
+
+
+```
+#### 22. Добавить VM1 и VM2 в /etc/hosts.
+```bash
+# Scylla
+[exam@localhost ~]$ cat /etc/hosts
+127.0.0.1   localhost scylla localhost4 localhost4.localdomain4
+::1         localhost scylla localhost6 localhost6.localdomain6
+192.168.0.121  charybdis
+192.168.0.120  scylla
+
+# Charybdis
+[exam@localhost ~]$ cat /etc/hosts
+127.0.0.1   localhost charybdis localhost4 localhost4.localdomain4
+::1         localhost charybdis localhost6 localhost6.localdomain6
+192.168.0.120  scylla
+192.168.0.121  charybdis
+
+```
+#### 23. Скачать файлы по ссылкам в /usr/local/hadoop/current/etc/hadoop/{hadoopenv.sh,core-site.xml,hdfs-site.xml,yarn-site.xml}. При помощи sed заменить
+заглушки на необходимые значения
+• hadoop-env.sh (https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b)  
+Необходимо определить переменные JAVA_HOME (путь до директории с OpenJDK8,  
+установленную в п.3), HADOOP_HOME (необходимо указать путь к симлинку из п.6) и  
+HADOOP_HEAPSIZE_MAX (укажите значение в 512M)  
+• core-site.xml (https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7)  
+Необходимо указать имя хоста, на котором будет запущена HDFS Namenode (VM1)  
+• hdfs-site.xml (https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38)  
+Необходимо указать директории namenode-dir, а также datanode-dir, каждый раз через  
+запятую (например, /opt/mount1/namenode-dir,/opt/mount2/namenode-dir)  
+• yarn-site.xml (https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158)  
+Необходимо подставить имя хоста, на котором будет развернут YARN Resource Manager (VM1), а  
+также пути до директорий nodemanager-local-dir и nodemanager-log-dir (если  
+необходимо указать несколько директорий, то необходимо их разделить запятыми)  
+#### 24. Задать переменную окружения HADOOP_HOME через /etc/profile
+# Для VM1 (шаги 25-26):
+#### 25. Произвести форматирование HDFS (от имени пользователя hdfs):
+• $HADOOP_HOME/bin/hdfs namenode -format cluster1  
+#### 26. Запустить демоны сервисов Hadoop:
+Для запуска Namenode (от имени пользователя hdfs):  
+• $HADOOP_HOME/bin/hdfs --daemon start namenode  
+Для запуска Resource Manager (от имени пользователя yarn):  
+• $HADOOP_HOME/bin/yarn --daemon start resourcemanager  
+# Для VM2 (шаг 27):
+#### 27. Запустить демоны сервисов:
+Для запуска Datanode (от имени hdfs):  
+• $HADOOP_HOME/bin/hdfs --daemon start datanode  
+Для запуска Node Manager (от имени yarn):  
+• $HADOOP_HOME/bin/yarn --daemon start nodemanager  
+#### 28. Проверить доступность Web-интефейсов HDFS Namenode и YARN Resource Manager по портам
+9870 и 8088 соответственно (VM1). << порты должны быть доступны с хостовой системы.  
+#### 29. Настроить управление запуском каждого компонента Hadoop при помощи systemd (используя
+юниты-сервисы).
+
