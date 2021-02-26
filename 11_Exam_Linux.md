@@ -73,6 +73,25 @@ openjdk version "1.8.0_282"
 OpenJDK Runtime Environment (build 1.8.0_282-b08)
 OpenJDK 64-Bit Server VM (build 25.282-b08, mixed mode)
 
+# узнать путь до Java, скопировать
+[exam@scylla ~]$ sudo update-alternatives --config java
+
+There is 1 program that provides 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*+ 1           java-1.8.0-openjdk.x86_64 (/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre/bin/java)
+
+# Добавить PATH для Java
+[exam@scylla ~]$ vi .bash_profile
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre/bin/java
+export JAVA_HOME
+
+# Обновить .bash_profile
+[exam@scylla ~]$ source .bash_profile
+[exam@scylla ~]$ echo $JAVA_HOME
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre/bin/java
+
 ```
 # 4. Скачать архив с Hadoop версии 3.1.2 (https://hadoop.apache.org/release/3.1.2.html)  
 Копируем адрес ссылки https://archive.apache.org/dist/hadoop/common/hadoop-3.1.2/hadoop-3.1.2.tar.gz   
@@ -903,12 +922,24 @@ Connection to 192.168.0.120 closed.
 192.168.0.121  charybdis
 
 ```
-#### 23. Скачать файлы по ссылкам в /usr/local/hadoop/current/etc/hadoop/{hadoopenv.sh,core-site.xml,hdfs-site.xml,yarn-site.xml}. При помощи sed заменить
+#### 23. Скачать файлы по ссылкам в /usr/local/hadoop/current/etc/hadoop/{hadoop-env.sh,core-site.xml,hdfs-site.xml,yarn-site.xml}. При помощи sed заменить
 заглушки на необходимые значения
+```bash
+# Скачать через Raw ссылку
+sudo wget https://gist.githubusercontent.com/rdaadr/2f42f248f02aeda18105805493bb0e9b/raw/6303e424373b3459bcf3720b253c01373666fe7c/hadoop-env.sh -O /usr/local/hadoop/current/etc/hadoop/hadoop-env.sh
+sudo wget https://gist.githubusercontent.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7/raw/2d416bf137cba81b107508153621ee548e2c877d/core-site.xml -O /usr/local/hadoop/current/etc/hadoop/core-site.xml
+sudo wget https://gist.githubusercontent.com/rdaadr/2bedf24fd2721bad276e416b57d63e38/raw/640ee95adafa31a70869b54767104b826964af48/hdfs-site.xml -O /usr/local/hadoop/current/etc/hadoop/hdfs-site.xml
+sudo wget https://gist.githubusercontent.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158/raw/bda0f760878d97213196d634be9b53a089e796ea/yarn-site.xml -O /usr/local/hadoop/current/etc/hadoop/yarn-site.xml
+```
 • hadoop-env.sh (https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b)  
 Необходимо определить переменные JAVA_HOME (путь до директории с OpenJDK8,  
 установленную в п.3), HADOOP_HOME (необходимо указать путь к симлинку из п.6) и  
 HADOOP_HEAPSIZE_MAX (укажите значение в 512M)  
+```bash
+[exam@scylla ~]$ sed -i '/^export JAVA_HOME/s/=.*$/=\/usr\/lib\/jvm\/java-1\.8\.0-openjdk-1\.8\.0\.282\.b08-1\.el7_9\.x86_64\/jre\/bin\/java/' hadoop-env.sh
+[exam@scylla ~]$ sed -i '/^export HADOOP_HOME/s/=.*$/=\/usr\/local\/hadoop\/current\/hadoop-3\.1\.2/' hadoop-env.sh
+[exam@scylla ~]$ sed -i '/^export HADOOP_HEAPSIZE_MAX/s/=.*$/=512M/' hadoop-env.sh
+```
 • core-site.xml (https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7)  
 Необходимо указать имя хоста, на котором будет запущена HDFS Namenode (VM1)  
 • hdfs-site.xml (https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38)  
@@ -918,21 +949,27 @@ HADOOP_HEAPSIZE_MAX (укажите значение в 512M)
 Необходимо подставить имя хоста, на котором будет развернут YARN Resource Manager (VM1), а  
 также пути до директорий nodemanager-local-dir и nodemanager-log-dir (если  
 необходимо указать несколько директорий, то необходимо их разделить запятыми)  
+
 #### 24. Задать переменную окружения HADOOP_HOME через /etc/profile
+
 # Для VM1 (шаги 25-26):
 #### 25. Произвести форматирование HDFS (от имени пользователя hdfs):
 • $HADOOP_HOME/bin/hdfs namenode -format cluster1  
+
 #### 26. Запустить демоны сервисов Hadoop:
 Для запуска Namenode (от имени пользователя hdfs):  
 • $HADOOP_HOME/bin/hdfs --daemon start namenode  
 Для запуска Resource Manager (от имени пользователя yarn):  
 • $HADOOP_HOME/bin/yarn --daemon start resourcemanager  
+
 # Для VM2 (шаг 27):
 #### 27. Запустить демоны сервисов:
 Для запуска Datanode (от имени hdfs):  
 • $HADOOP_HOME/bin/hdfs --daemon start datanode  
 Для запуска Node Manager (от имени yarn):  
 • $HADOOP_HOME/bin/yarn --daemon start nodemanager  
+
+# Для VM1 и VM2
 #### 28. Проверить доступность Web-интефейсов HDFS Namenode и YARN Resource Manager по портам
 9870 и 8088 соответственно (VM1). << порты должны быть доступны с хостовой системы.  
 #### 29. Настроить управление запуском каждого компонента Hadoop при помощи systemd (используя
