@@ -92,6 +92,14 @@ export JAVA_HOME
 [exam@scylla ~]$ echo $JAVA_HOME
 /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre/bin/java
 
+# Инфа для всех
+[exam@charybdis ~]$ sudo vi /etc/profile
+HADOOP_HOME=/opt/hadoop-3.1.2
+export HADOOP_HOME
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
 ```
 # 4. Скачать архив с Hadoop версии 3.1.2 (https://hadoop.apache.org/release/3.1.2.html)  
 Копируем адрес ссылки https://archive.apache.org/dist/hadoop/common/hadoop-3.1.2/hadoop-3.1.2.tar.gz   
@@ -926,52 +934,267 @@ Connection to 192.168.0.120 closed.
 заглушки на необходимые значения
 ```bash
 # Скачать через Raw ссылку
-sudo wget https://gist.githubusercontent.com/rdaadr/2f42f248f02aeda18105805493bb0e9b/raw/6303e424373b3459bcf3720b253c01373666fe7c/hadoop-env.sh -O /usr/local/hadoop/current/etc/hadoop/hadoop-env.sh
-sudo wget https://gist.githubusercontent.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7/raw/2d416bf137cba81b107508153621ee548e2c877d/core-site.xml -O /usr/local/hadoop/current/etc/hadoop/core-site.xml
-sudo wget https://gist.githubusercontent.com/rdaadr/2bedf24fd2721bad276e416b57d63e38/raw/640ee95adafa31a70869b54767104b826964af48/hdfs-site.xml -O /usr/local/hadoop/current/etc/hadoop/hdfs-site.xml
-sudo wget https://gist.githubusercontent.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158/raw/bda0f760878d97213196d634be9b53a089e796ea/yarn-site.xml -O /usr/local/hadoop/current/etc/hadoop/yarn-site.xml
+[exam@scylla ~]$ sudo wget https://gist.githubusercontent.com/rdaadr/2f42f248f02aeda18105805493bb0e9b/raw/6303e424373b3459bcf3720b253c01373666fe7c/hadoop-env.sh -O /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/hadoop-env.sh
+[exam@scylla ~]$ sudo wget https://gist.githubusercontent.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7/raw/2d416bf137cba81b107508153621ee548e2c877d/core-site.xml -O /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/core-site.xml
+[exam@scylla ~]$ sudo wget https://gist.githubusercontent.com/rdaadr/2bedf24fd2721bad276e416b57d63e38/raw/640ee95adafa31a70869b54767104b826964af48/hdfs-site.xml -O /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/hdfs-site.xml
+[exam@scylla ~]$ sudo wget https://gist.githubusercontent.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158/raw/bda0f760878d97213196d634be9b53a089e796ea/yarn-site.xml -O /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/yarn-site.xml
+
+[exam@scylla ~]$ ls -la /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop
+total 176
+drwxrwsr-x. 3 hadoop hadoop  4096 Jan 28  2019 .
+drwxrwsr-x. 3 hadoop hadoop    20 Jan 28  2019 ..
+-rw-rwSr--. 1 hadoop hadoop  8260 Jan 28  2019 capacity-scheduler.xml
+-rw-rwSr--. 1 hadoop hadoop  1335 Jan 28  2019 configuration.xsl
+-rw-rwSr--. 1 hadoop hadoop  1940 Jan 28  2019 container-executor.cfg
+-rw-rwSr--. 1 hadoop hadoop   908 Feb 27 16:39 core-site.xml
+-rw-rwSr--. 1 hadoop hadoop  3999 Jan 28  2019 hadoop-env.cmd
+-rw-rwSr--. 1 hadoop hadoop 15980 Feb 27 16:39 hadoop-env.sh
+-rw-rwSr--. 1 hadoop hadoop  3323 Jan 28  2019 hadoop-metrics2.properties
+-rw-rwSr--. 1 hadoop hadoop 11392 Jan 28  2019 hadoop-policy.xml
+-rw-rwSr--. 1 hadoop hadoop  3414 Jan 28  2019 hadoop-user-functions.sh.example
+-rw-rwSr--. 1 hadoop hadoop  1081 Feb 27 16:39 hdfs-site.xml
+-rw-rwSr--. 1 hadoop hadoop  1484 Jan 28  2019 httpfs-env.sh
+-rw-rwSr--. 1 hadoop hadoop  1657 Jan 28  2019 httpfs-log4j.properties
+-rw-rwSr--. 1 hadoop hadoop    21 Jan 28  2019 httpfs-signature.secret
+-rw-rwSr--. 1 hadoop hadoop   620 Jan 28  2019 httpfs-site.xml
+-rw-rwSr--. 1 hadoop hadoop  3518 Jan 28  2019 kms-acls.xml
+-rw-rwSr--. 1 hadoop hadoop  1351 Jan 28  2019 kms-env.sh
+-rw-rwSr--. 1 hadoop hadoop  1747 Jan 28  2019 kms-log4j.properties
+-rw-rwSr--. 1 hadoop hadoop   682 Jan 28  2019 kms-site.xml
+-rw-rwSr--. 1 hadoop hadoop 13326 Jan 28  2019 log4j.properties
+-rw-rwSr--. 1 hadoop hadoop   951 Jan 28  2019 mapred-env.cmd
+-rw-rwSr--. 1 hadoop hadoop  1764 Jan 28  2019 mapred-env.sh
+-rw-rwSr--. 1 hadoop hadoop  4113 Jan 28  2019 mapred-queues.xml.template
+-rw-rwSr--. 1 hadoop hadoop   758 Jan 28  2019 mapred-site.xml
+drwxrwsr-x. 2 hadoop hadoop    24 Jan 28  2019 shellprofile.d
+-rw-rwSr--. 1 hadoop hadoop  2316 Jan 28  2019 ssl-client.xml.example
+-rw-rwSr--. 1 hadoop hadoop  2697 Jan 28  2019 ssl-server.xml.example
+-rw-rwSr--. 1 hadoop hadoop  2642 Jan 28  2019 user_ec_policies.xml.template
+-rw-rwSr--. 1 hadoop hadoop    10 Jan 28  2019 workers
+-rw-rwSr--. 1 hadoop hadoop  2250 Jan 28  2019 yarn-env.cmd
+-rw-rwSr--. 1 hadoop hadoop  6056 Jan 28  2019 yarn-env.sh
+-rw-rwSr--. 1 hadoop hadoop  2591 Jan 28  2019 yarnservice-log4j.properties
+-rw-rwSr--. 1 hadoop hadoop  1499 Feb 27 16:39 yarn-site.xml
+
 ```
 • hadoop-env.sh (https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b)  
 Необходимо определить переменные JAVA_HOME (путь до директории с OpenJDK8,  
 установленную в п.3), HADOOP_HOME (необходимо указать путь к симлинку из п.6) и  
 HADOOP_HEAPSIZE_MAX (укажите значение в 512M)  
 ```bash
-[exam@scylla ~]$ sed -i '/^export JAVA_HOME/s/=.*$/=\/usr\/lib\/jvm\/java-1\.8\.0-openjdk-1\.8\.0\.282\.b08-1\.el7_9\.x86_64\/jre\/bin\/java/' hadoop-env.sh
-[exam@scylla ~]$ sed -i '/^export HADOOP_HOME/s/=.*$/=\/usr\/local\/hadoop\/current\/hadoop-3\.1\.2/' hadoop-env.sh
-[exam@scylla ~]$ sed -i '/^export HADOOP_HEAPSIZE_MAX/s/=.*$/=512M/' hadoop-env.sh
+[exam@scylla ~]$ sudo sed -i '/^export JAVA_HOME/s/=.*$/=\/usr\/lib\/jvm\/java-1\.8\.0-openjdk/' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/hadoop-env.sh
+[exam@scylla ~]$ sudo sed -i '/^export HADOOP_HOME/s/=.*$/=\/usr\/local\/hadoop\/current\/hadoop-3\.1\.2/' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/hadoop-env.sh       [exam@scylla ~]$ sudo sed -i '/^export HADOOP_HEAPSIZE_MAX/s/=.*$/=512M/' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/hadoop-env.sh 
 ```
 • core-site.xml (https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7)  
 Необходимо указать имя хоста, на котором будет запущена HDFS Namenode (VM1)  
+```bash
+# Test
+[exam@scylla ~]$ sed -E 's/([\%])\w+[\%]/scylla/g;t;d' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/core-site.xml
+[exam@scylla ~]$ sudo sed -Ei 's/([\%])\w+[\%]/scylla/g' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/core-site.xml
+```
 • hdfs-site.xml (https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38)  
 Необходимо указать директории namenode-dir, а также datanode-dir, каждый раз через  
 запятую (например, /opt/mount1/namenode-dir,/opt/mount2/namenode-dir)  
+```bash
+• /opt/mount1/namenode-dir  
+• /opt/mount2/namenode-dir 
+• /opt/mount1/datanode-dir  
+• /opt/mount2/datanode-dir
+[exam@scylla ~]$ sudo sed -Ei 's/([\%])DATANODE_DIRS[\%]/\/opt\/mount1\/datanode-dir\,\/opt\/mount2\/datanode-dir/g ; s/([\%])NAMENODE_DIRS[\%]/\/opt\/mount1\/namenode-dir\,\/opt\/mount2\/namenode-dir/g' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/hdfs-site.xml
+
+```
 • yarn-site.xml (https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158)  
 Необходимо подставить имя хоста, на котором будет развернут YARN Resource Manager (VM1), а  
 также пути до директорий nodemanager-local-dir и nodemanager-log-dir (если  
 необходимо указать несколько директорий, то необходимо их разделить запятыми)  
-
+```bash
+scylla
+• /opt/mount1/nodemanager-local-dir  
+• /opt/mount2/nodemanager-local-dir  
+• /opt/mount1/nodemanager-log-dir  
+• /opt/mount2/nodemanager-log-dir 
+YARN_RESOURCE_MANAGER_HOSTNAME
+NODE_MANAGER_LOCAL_DIR
+%NODE_MANAGER_LOG_DIR%
+[exam@scylla ~]$ sudo sed -Ei 's/([\%])YARN_RESOURCE_MANAGER_HOSTNAME[\%]/scylla/g ; s/([\%])NODE_MANAGER_LOCAL_DIR[\%]/\/opt\/mount1\/nodemanager-local-dir\,\/opt\/mount2\/nodemanager-local-dir/g ; s/([\%])NODE_MANAGER_LOG_DIR[\%]/\/opt\/mount1\/nodemanager-log-dir\,\/opt\/mount2\/nodemanager-log-dir/g' /usr/local/hadoop/current/hadoop-3.1.2/etc/hadoop/yarn-site.xml
+```
 #### 24. Задать переменную окружения HADOOP_HOME через /etc/profile
+```bash
+[exam@scylla ~]$ sudo cat /etc/profile | grep HADOOP
+HADOOP_HOME=/opt/hadoop-3.1.2
+export HADOOP_HOME
 
+# Обновить и тест
+[exam@scylla ~]$ source /etc/profile
+[exam@scylla ~]$ echo $HADOOP_HOME
+/opt/hadoop-3.1.2
+```
 # Для VM1 (шаги 25-26):
 #### 25. Произвести форматирование HDFS (от имени пользователя hdfs):
 • $HADOOP_HOME/bin/hdfs namenode -format cluster1  
+```bash
+# Была ошибка
+[hdfs@scylla ~]$ $HADOOP_HOME/bin/hdfs namenode -format cluster1
+ERROR: JAVA_HOME is not set and could not be found.
 
+# Добавили сюда путь. 
+[exam@scylla ~]$ sudo cat /etc/profile | grep JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
+# Добавили права
+[exam@scylla ~]$ sudo chmod g+s -R /opt/hadoop-3.1.2
+[exam@scylla ~]$ ls -ld /opt/hadoop-3.1.2
+drwxr-sr-x. 9 hadoop hadoop 149 Jan 28  2019 /opt/hadoop-3.1.2
+[exam@scylla ~]$ sudo chmod g+w -R /opt/hadoop-3.1.2
+
+[exam@scylla ~]$ ls -ld /opt/hadoop-3.1.2
+drwxrwsr-x. 9 hadoop hadoop 149 Jan 28  2019 /opt/hadoop-3.1.2
+
+# Пуск
+[hdfs@scylla ~]$ $HADOOP_HOME/bin/hdfs namenode -format cluster1
+WARNING: /opt/hadoop-3.1.2/logs does not exist. Creating.
+2021-02-27 15:47:30,563 INFO namenode.NameNode: STARTUP_MSG:
+/************************************************************
+STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = localhost/127.0.0.1
+STARTUP_MSG:   args = [-format, cluster1]
+STARTUP_MSG:   version = 3.1.2
+.....
+2021-02-27 15:47:31,514 INFO common.Storage: Storage directory /tmp/hadoop-hdfs/dfs/name has been successfully formatted.
+2021-02-27 15:47:31,519 INFO namenode.FSImageFormatProtobuf: Saving image file /tmp/hadoop-hdfs/dfs/name/current/fsimage.ckpt_0000000000000000000 using no compression
+2021-02-27 15:47:31,584 INFO namenode.FSImageFormatProtobuf: Image file /tmp/hadoop-hdfs/dfs/name/current/fsimage.ckpt_0000000000000000000 of size 391 bytes saved in 0 seconds .
+2021-02-27 15:47:31,596 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+2021-02-27 15:47:31,599 INFO namenode.NameNode: SHUTDOWN_MSG:
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at localhost/127.0.0.1
+************************************************************/
+```
 #### 26. Запустить демоны сервисов Hadoop:
 Для запуска Namenode (от имени пользователя hdfs):  
 • $HADOOP_HOME/bin/hdfs --daemon start namenode  
+```bash
+[hdfs@scylla ~]$ $HADOOP_HOME/bin/hdfs --daemon start namenode
+[hdfs@scylla ~]$ ps -ef | grep namenode
+hdfs      2487  2345  0 16:10 pts/0    00:00:00 grep --color=auto namenode
+```
 Для запуска Resource Manager (от имени пользователя yarn):  
 • $HADOOP_HOME/bin/yarn --daemon start resourcemanager  
+```bash
+[exam@scylla ~]$ sudo chmod g+w -R /opt/hadoop-3.1.2
+[exam@scylla ~]$ sudo chgrp -R hadoop /opt/hadoop-3.1.2
 
-# Для VM2 (шаг 27):
+[yarn@scylla ~]$ $HADOOP_HOME/bin/yarn --daemon start resourcemanager
+[yarn@scylla ~]$ ps -ef | grep resourcemanager
+yarn      2956     1 11 16:16 pts/0    00:00:03 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_resourcemanager -Djava.net.preferIPv4Stack=true -Dservice.libdir=/opt/hadoop-3.1.2/share/hadoop/yarn,/opt/hadoop-3.1.2/share/hadoop/yarn/lib,/opt/hadoop-3.1.2/share/hadoop/hdfs,/opt/hadoop-3.1.2/share/hadoop/hdfs/lib,/opt/hadoop-3.1.2/share/hadoop/common,/opt/hadoop-3.1.2/share/hadoop/common/lib -Dyarn.log.dir=/opt/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-yarn-resourcemanager-scylla.log -Dyarn.home.dir=/opt/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/opt/hadoop-3.1.2/lib/native -Dhadoop.log.dir=/opt/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-yarn-resourcemanager-scylla.log -Dhadoop.home.dir=/opt/hadoop-3.1.2 -Dhadoop.id.str=yarn -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+yarn      3175  2901  0 16:16 pts/0    00:00:00 grep --color=auto resourcemanager
+```
+# Для VM2 Charybdis (шаг 27):
 #### 27. Запустить демоны сервисов:
 Для запуска Datanode (от имени hdfs):  
 • $HADOOP_HOME/bin/hdfs --daemon start datanode  
+```bash
+[hdfs@charybdis ~]$ $HADOOP_HOME/bin/hdfs --daemon start datanode
+WARNING: /usr/local/hadoop/current/hadoop-3.1.2/logs does not exist. Creating.
+[hdfs@charybdis ~]$ ps -ef | grep datanode
+hdfs      1861     1  8 17:02 pts/0    00:00:02 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_datanode -Djava.net.preferIPv4Stack=true -Dhadoop.security.logger=ERROR,RFAS -Dyarn.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-hdfs-datanode-charybdis.log -Dyarn.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop/current/hadoop-3.1.2/lib/native -Xmx512M -Dhadoop.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-hdfs-datanode-charybdis.log -Dhadoop.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml org.apache.hadoop.hdfs.server.datanode.DataNode
+hdfs      1911  1806  0 17:02 pts/0    00:00:00 grep --color=auto datanode
+```
 Для запуска Node Manager (от имени yarn):  
 • $HADOOP_HOME/bin/yarn --daemon start nodemanager  
+```bash
+[yarn@charybdis ~]$ $HADOOP_HOME/bin/yarn --daemon start nodemanager
+[yarn@charybdis ~]$ ps -ef | grep nodemanager
+yarn      2035     1 10 17:04 pts/0    00:00:02 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_nodemanager -Djava.net.preferIPv4Stack=true -Dyarn.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-yarn-nodemanager-charybdis.log -Dyarn.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop/current/hadoop-3.1.2/lib/native -Xmx512M -Dhadoop.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-yarn-nodemanager-charybdis.log -Dhadoop.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dhadoop.id.str=yarn -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.yarn.server.nodemanager.NodeManager
+yarn      2116  1980  0 17:04 pts/0    00:00:00 grep --color=auto nodemanager
 
+[yarn@charybdis ~]$ $HADOOP_HOME/bin/yarn --daemon start nodemanager
+[yarn@charybdis ~]$ ps -ef | grep nodemanager
+yarn      2035     1 10 17:04 pts/0    00:00:02 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_nodemanager -Djava.net.preferIPv4Stack=true -Dyarn.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-yarn-nodemanager-charybdis.log -Dyarn.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop/current/hadoop-3.1.2/lib/native -Xmx512M -Dhadoop.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-yarn-nodemanager-charybdis.log -Dhadoop.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dhadoop.id.str=yarn -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.yarn.server.nodemanager.NodeManager
+yarn      2116  1980  0 17:04 pts/0    00:00:00 grep --color=auto nodemanager
+
+```
 # Для VM1 и VM2
 #### 28. Проверить доступность Web-интефейсов HDFS Namenode и YARN Resource Manager по портам
 9870 и 8088 соответственно (VM1). << порты должны быть доступны с хостовой системы.  
+```bash
+[exam@scylla ~]$ sudo iptables -I INPUT -p tcp --dport 8088 -m state --state NEW -j ACCEPT
+[exam@scylla ~]$ sudo iptables -I INPUT -p tcp --dport 9870 -m state --state NEW -j ACCEPT
+
+[exam@scylla ~]$ sudo service iptables save
+iptables: Saving firewall rules to /etc/sysconfig/iptables:[  OK  ]
+[exam@scylla ~]$ systemctl restart iptables
+
+# Test
+[exam@charybdis ~]$ sudo nmap -sV -PN -p 9870 scylla
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2021-02-27 17:48 EST
+Nmap scan report for scylla (192.168.0.120)
+Host is up (0.00027s latency).
+PORT     STATE SERVICE VERSION
+9870/tcp open  unknown
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at http://www.insecure.org/cgi-bin/servicefp-submit.cgi :
+SF-Port9870-TCP:V=6.40%I=7%D=2/27%Time=603ACC55%P=x86_64-redhat-linux-gnu%
+SF:r(GetRequest,5F3,"HTTP/1\.1\x20200\x20OK\r\nDate:\x20Sat,\x2027\x20Feb\
+SF:x202021\x2022:48:53\x20GMT\r\nCache-Control:\x20no-cache\r\nExpires:\x2
+SF:0Sat,\x2027\x20Feb\x202021\x2022:48:53\x20GMT\r\nDate:\x20Sat,\x2027\x2
+SF:0Feb\x202021\x2022:48:53\x20GMT\r\nPragma:\x20no-cache\r\nContent-Type:
+SF:\x20text/html\r\nX-FRAME-OPTIONS:\x20SAMEORIGIN\r\nExpires:\x20Sat,\x20
+SF:27\x20Feb\x202021\x2022:48:53\x20GMT\r\nDate:\x20Sat,\x2027\x20Feb\x202
+SF:021\x2022:48:53\x20GMT\r\nPragma:\x20no-cache\r\nX-FRAME-OPTIONS:\x20SA
+SF:MEORIGIN\r\nLast-Modified:\x20Tue,\x2029\x20Jan\x202019\x2003:35:58\x20
+SF:GMT\r\nAccept-Ranges:\x20bytes\r\nContent-Length:\x201079\r\n\r\n<!--\n
+SF:\x20\x20\x20Licensed\x20to\x20the\x20Apache\x20Software\x20Foundation\x
+SF:20\(ASF\)\x20under\x20one\x20or\x20more\n\x20\x20\x20contributor\x20lic
+SF:ense\x20agreements\.\x20\x20See\x20the\x20NOTICE\x20file\x20distributed
+SF:\x20with\n\x20\x20\x20this\x20work\x20for\x20additional\x20information\
+SF:x20regarding\x20copyright\x20ownership\.\n\x20\x20\x20The\x20ASF\x20lic
+SF:enses\x20this\x20file\x20to\x20You\x20under\x20the\x20Apache\x20License
+SF:,\x20Version\x202\.0\n\x20\x20\x20\(the\x20\"License\"\);\x20you\x20may
+SF:\x20not\x20use\x20this\x20file\x20except\x20in\x20compliance\x20with\n\
+SF:x20\x20\x20the\x20License\.\x20\x20You\x20may\x20obtain\x20a\x20copy\x2
+SF:0of\x20the\x20License\x20at\n\n\x20\x20\x20\x20\x20\x20\x20http://www\.
+SF:apache\.org/lic")%r(HTTPOptions,126,"HTTP/1\.1\x20200\x20OK\r\nDate:\x2
+SF:0Sat,\x2027\x20Feb\x202021\x2022:48:53\x20GMT\r\nCache-Control:\x20no-c
+SF:ache\r\nExpires:\x20Sat,\x2027\x20Feb\x202021\x2022:48:53\x20GMT\r\nDat
+SF:e:\x20Sat,\x2027\x20Feb\x202021\x2022:48:53\x20GMT\r\nPragma:\x20no-cac
+SF:he\r\nContent-Type:\x20text/plain;charset=utf-8\r\nX-FRAME-OPTIONS:\x20
+SF:SAMEORIGIN\r\nAllow:\x20GET,HEAD,POST,OPTIONS\r\nContent-Length:\x200\r
+SF:\n\r\n")%r(RTSPRequest,46,"HTTP/1\.1\x20400\x20Unknown\x20Version\r\nCo
+SF:ntent-Length:\x200\r\nConnection:\x20close\r\n\r\n")%r(RPCCheck,43,"HTT
+SF:P/1\.1\x20400\x20Bad\x20preamble\r\nContent-Length:\x200\r\nConnection:
+SF:\x20close\r\n\r\n")%r(DNSVersionBindReq,4C,"HTTP/1\.1\x20400\x20Illegal
+SF:\x20character\x200x0\r\nContent-Length:\x200\r\nConnection:\x20close\r\
+SF:n\r\n");
+MAC Address: 00:15:5D:00:6B:00 (Microsoft)
+
+Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.53 seconds
+
+[exam@charybdis ~]$ sudo nmap -sV -PN -p 8088 scylla
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2021-02-27 17:49 EST
+Nmap scan report for scylla (192.168.0.120)
+Host is up (0.00026s latency).
+PORT     STATE  SERVICE    VERSION
+8088/tcp closed radan-http
+MAC Address: 00:15:5D:00:6B:00 (Microsoft)
+
+Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 0.47 seconds
+
+```
 #### 29. Настроить управление запуском каждого компонента Hadoop при помощи systemd (используя
 юниты-сервисы).
+```bash
 
+[root@localhost ~]# cat /etc/systemd/system/hadoop.service
+[Unit]
+Description=Hadoop
+
+[Service]
+ExecStart=/bin/bash /usr/bin/hadoop_start.sh
+
+[Install]
+WantedBy=multi-user.target
+```
