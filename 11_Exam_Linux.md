@@ -1302,3 +1302,10 @@ ExecStop=/bin/bash $HADOOP_HOME/sbin/yarn_stop.sh
 [Install]
 WantedBy=multi-user.target
 ```
+```bash
+[exam@scylla ~]$ sudo chmod +x /etc/systemd/system/yarn-daemon.service
+[exam@scylla ~]$ sudo chmod +x /etc/systemd/system/hdfs-daemon.service
+
+[exam@charybdis ~]$ sudo chmod +x /etc/systemd/system/yarn-daemon.service
+[exam@charybdis ~]$ sudo chmod +x /etc/systemd/system/hdfs-daemon.service
+```
