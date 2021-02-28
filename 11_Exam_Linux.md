@@ -1107,23 +1107,38 @@ hdfs      1911  1806  0 17:02 pts/0    00:00:00 grep --color=auto datanode
 [yarn@charybdis ~]$ ps -ef | grep nodemanager
 yarn      2035     1 10 17:04 pts/0    00:00:02 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_nodemanager -Djava.net.preferIPv4Stack=true -Dyarn.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-yarn-nodemanager-charybdis.log -Dyarn.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop/current/hadoop-3.1.2/lib/native -Xmx512M -Dhadoop.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-yarn-nodemanager-charybdis.log -Dhadoop.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dhadoop.id.str=yarn -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.yarn.server.nodemanager.NodeManager
 yarn      2116  1980  0 17:04 pts/0    00:00:00 grep --color=auto nodemanager
-
-[yarn@charybdis ~]$ $HADOOP_HOME/bin/yarn --daemon start nodemanager
-[yarn@charybdis ~]$ ps -ef | grep nodemanager
-yarn      2035     1 10 17:04 pts/0    00:00:02 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_nodemanager -Djava.net.preferIPv4Stack=true -Dyarn.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-yarn-nodemanager-charybdis.log -Dyarn.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop/current/hadoop-3.1.2/lib/native -Xmx512M -Dhadoop.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-yarn-nodemanager-charybdis.log -Dhadoop.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dhadoop.id.str=yarn -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.yarn.server.nodemanager.NodeManager
-yarn      2116  1980  0 17:04 pts/0    00:00:00 grep --color=auto nodemanager
-
 ```
 # Для VM1 и VM2
 #### 28. Проверить доступность Web-интефейсов HDFS Namenode и YARN Resource Manager по портам
 9870 и 8088 соответственно (VM1). << порты должны быть доступны с хостовой системы.  
 ```bash
+[exam@scylla ~]$ sudo iptables -F
+[exam@scylla ~]$ sudo systemctl stop firewalld
+[exam@scylla ~]$ sudo systemctl disable firewalld
+[exam@scylla ~]$ sudo systemctl enable iptables
 [exam@scylla ~]$ sudo iptables -I INPUT -p tcp --dport 8088 -m state --state NEW -j ACCEPT
 [exam@scylla ~]$ sudo iptables -I INPUT -p tcp --dport 9870 -m state --state NEW -j ACCEPT
 
 [exam@scylla ~]$ sudo service iptables save
 iptables: Saving firewall rules to /etc/sysconfig/iptables:[  OK  ]
 [exam@scylla ~]$ systemctl restart iptables
+
+[exam@scylla ~]$ sudo iptables -L -v -n
+Chain INPUT (policy ACCEPT 218 packets, 13509 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    2    88 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:63000 state NEW
+   28  1648 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:9870 state NEW
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8088 state NEW
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+Chain OUTPUT (policy ACCEPT 237 packets, 16996 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8088 state NEW
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:9870 state NEW
+
+
 
 # Test
 [exam@charybdis ~]$ sudo nmap -sV -PN -p 9870 scylla
@@ -1183,17 +1198,106 @@ MAC Address: 00:15:5D:00:6B:00 (Microsoft)
 Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 0.47 seconds
 
+
 ```
 #### 29. Настроить управление запуском каждого компонента Hadoop при помощи systemd (используя
 юниты-сервисы).
 ```bash
+[exam@scylla ~]$ sudo cat $HADOOP_HOME/sbin/hdfs_start.sh
+#!/bin/bash
 
-[root@localhost ~]# cat /etc/systemd/system/hadoop.service
+$HADOOP_HOME/bin/hdfs --daemon start namenode
+
+[exam@scylla ~]$ sudo cat $HADOOP_HOME/sbin/hdfs_stop.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/hdfs --daemon stop namenode
+
+[exam@scylla ~]$ sudo cat /etc/systemd/system/hdfs-daemon.service
 [Unit]
-Description=Hadoop
+Description=Hdfs
 
 [Service]
-ExecStart=/bin/bash /usr/bin/hadoop_start.sh
+User=hdfs
+Group=hadoop
+ExecStart=/bin/bash $HADOOP_HOME/sbin/hdfs_start.sh
+ExecStop=/bin/bash $HADOOP_HOME/sbin/hdfs_stop.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+```bash
+[exam@scylla ~]$ sudo cat $HADOOP_HOME/sbin/yarn_start.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/yarn --daemon start resourcemanager
+[exam@scylla ~]$ sudo cat $HADOOP_HOME/sbin/yarn_stop.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/yarn --daemon stop resourcemanager
+
+[exam@scylla ~]$ sudo cat /etc/systemd/system/yarn-daemon.service
+[Unit]
+Description=Hdfs
+
+[Service]
+User=yarn
+Group=hadoop
+ExecStart=/bin/bash $HADOOP_HOME/sbin/yarn_start.sh
+ExecStop=/bin/bash $HADOOP_HOME/sbin/yarn_stop.sh
+
+[Install]
+WantedBy=multi-user.target
+
+```
+```bash
+[exam@charybdis ~]$ sudo cat $HADOOP_HOME/sbin/hdfs_start.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/hdfs --daemon start datanode
+
+[exam@charybdis ~]$ sudo cat $HADOOP_HOME/sbin/hdfs_stop.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/hdfs --daemon stop datanode
+
+[exam@charybdis ~]$ sudo cat $HADOOP_HOME/sbin/hdfs_stop.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/hdfs --daemon stop datanode
+
+[exam@charybdis ~]$ sudo cat /etc/systemd/system/hdfs-daemon.service
+[Unit]
+Description=Hdfs
+
+[Service]
+User=hdfs
+Group=hadoop
+ExecStart=/bin/bash $HADOOP_HOME/sbin/hdfs_start.sh
+ExecStop=/bin/bash $HADOOP_HOME/sbin/hdfs_stop.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+```bash
+[exam@charybdis ~]$ sudo cat $HADOOP_HOME/sbin/yarn_start.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/yarn --daemon start nodemanager
+[exam@charybdis ~]$ sudo cat $HADOOP_HOME/sbin/yarn_stop.sh
+#!/bin/bash
+
+$HADOOP_HOME/bin/yarn --daemon stop nodemanager
+
+[exam@charybdis ~]$ sudo cat /etc/systemd/system/yarn-daemon.service
+[Unit]
+Description=Hdfs
+
+[Service]
+User=yarn
+Group=hadoop
+ExecStart=/bin/bash $HADOOP_HOME/sbin/yarn_start.sh
+ExecStop=/bin/bash $HADOOP_HOME/sbin/yarn_stop.sh
 
 [Install]
 WantedBy=multi-user.target
