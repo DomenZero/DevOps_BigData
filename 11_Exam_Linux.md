@@ -1309,3 +1309,39 @@ WantedBy=multi-user.target
 [exam@charybdis ~]$ sudo chmod +x /etc/systemd/system/yarn-daemon.service
 [exam@charybdis ~]$ sudo chmod +x /etc/systemd/system/hdfs-daemon.service
 ```
+
+# Дополнительно
+## Посмотреть что крутится на порту
+```bash
+[exam@scylla ~]$ sudo lsof -t -i:8088
+3113
+[exam@scylla ~]$ ps -ef | grep 3113
+yarn      3113     1  0 11:44 pts/0    00:00:08 /usr/lib/jvm/java-1.8.0-openjdk/bin/java -Dproc_resourcemanager -Djava.net.preferIPv4Stack=true -Dservice.libdir=/usr/local/hadoop/current/hadoop-3.1.2/share/hadoop/yarn,/usr/local/hadoop/current/hadoop-3.1.2/share/hadoop/yarn/lib,/usr/local/hadoop/current/hadoop-3.1.2/share/hadoop/hdfs,/usr/local/hadoop/current/hadoop-3.1.2/share/hadoop/hdfs/lib,/usr/local/hadoop/current/hadoop-3.1.2/share/hadoop/common,/usr/local/hadoop/current/hadoop-3.1.2/share/hadoop/common/lib -Dyarn.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dyarn.log.file=hadoop-yarn-resourcemanager-scylla.log -Dyarn.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dyarn.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop/current/hadoop-3.1.2/lib/native -Xmx512M -Dhadoop.log.dir=/usr/local/hadoop/current/hadoop-3.1.2/logs -Dhadoop.log.file=hadoop-yarn-resourcemanager-scylla.log -Dhadoop.home.dir=/usr/local/hadoop/current/hadoop-3.1.2 -Dhadoop.id.str=yarn -Dhadoop.root.logger=INFO,RFA -Dhadoop.policy.file=hadoop-policy.xml -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+exam      3589  1531  0 12:21 pts/0    00:00:00 grep --color=auto 3113
+```
+## Прослушать порт
+```bash
+[exam@scylla ~]$ sudo lsof -i -P | grep :80
+java    1717   hdfs  263u  IPv4  21629      0t0  TCP localhost:8020 (LISTEN)
+java    3113   yarn  264u  IPv4  26547      0t0  TCP localhost:8088 (LISTEN)
+java    3113   yarn  274u  IPv4  26567      0t0  TCP localhost:8033 (LISTEN)
+java    3113   yarn  285u  IPv4  26571      0t0  TCP localhost:8031 (LISTEN)
+java    3113   yarn  295u  IPv4  26575      0t0  TCP localhost:8030 (LISTEN)
+java    3113   yarn  305u  IPv4  26592      0t0  TCP localhost:8032 (LISTEN)
+```
+## Просмотреть порты
+```bash
+[exam@scylla ~]$ ss -lnt
+State       Recv-Q Send-Q                                                                       Local Address:Port                                                                                      Peer Address:Port
+LISTEN      0      128                                                                                      *:9870                                                                                                 *:*
+LISTEN      0      128                                                                              127.0.0.1:8020                                                                                                 *:*
+LISTEN      0      128                                                                                      *:22                                                                                                   *:*
+LISTEN      0      128                                                                              127.0.0.1:8088                                                                                                 *:*
+LISTEN      0      100                                                                              127.0.0.1:25                                                                                                   *:*
+LISTEN      0      128                                                                              127.0.0.1:8030                                                                                                 *:*
+LISTEN      0      128                                                                              127.0.0.1:8031                                                                                                 *:*
+LISTEN      0      128                                                                              127.0.0.1:8032                                                                                                 *:*
+LISTEN      0      128                                                                              127.0.0.1:8033                                                                                                 *:*
+LISTEN      0      128                                                                                   [::]:22                                                                                                [::]:*
+LISTEN      0      100                                                                                  [::1]:25                                                                                                [::]:*
+```
