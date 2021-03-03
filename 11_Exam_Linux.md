@@ -1344,4 +1344,21 @@ LISTEN      0      128                                                          
 LISTEN      0      128                                                                              127.0.0.1:8033                                                                                                 *:*
 LISTEN      0      128                                                                                   [::]:22                                                                                                [::]:*
 LISTEN      0      100                                                                                  [::1]:25                                                                                                [::]:*
+
+
+Proto - The protocol used by the socket
+Local Address:Port - The IP Address and port number on which the process listen to
+
+# With users
+[exam@scylla ~]$ sudo ss -tunlp
+Netid  State      Recv-Q Send-Q                                                       Local Address:Port                                                                      Peer Address:Port
+udp    UNCONN     0      0                                                                127.0.0.1:323                                                                                  *:*                   users:(("chronyd",pid=733,fd=5))
+udp    UNCONN     0      0                                                                    [::1]:323                                                                               [::]:*                   users:(("chronyd",pid=733,fd=6))
+tcp    LISTEN     0      128                                                                      *:9870                                                                                 *:*                   users:(("java",pid=1947,fd=250))
+tcp    LISTEN     0      128                                                              127.0.0.1:8020         
+
+# Проверить занят ли порт
+[exam@scylla sbin]$ nc -t -l 8088
+Ncat: bind to 0.0.0.0:8088: Address already in use. QUITTING.
+
 ```
