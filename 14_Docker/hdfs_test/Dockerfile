@@ -16,8 +16,6 @@ ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 ARG HOST_NAME=scylla
 ARG CLIENT_NAME=charybdis
 ARG HADOOP_VERSION=3.1.2
-#RUN mkdir downloads \
-#	cd downloads
 
 RUN wget https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz && \
 	tar -xzvf hadoop-${HADOOP_VERSION}.tar.gz -C /usr/local && \
@@ -33,9 +31,7 @@ RUN mkdir -p /opt/mount{1..2}/namenode-dir && \
 VOLUME [ "/opt/mount1/namenode-dir ", "/opt/mount2/namenode-dir ", "/hadoop/dfs/sname1", "/hadoop/dfs/data1" ]
 
 RUN mkdir -p /home/hadoop/.ssh && \
-#	mkdir -p /home/hadoop/.ssh/authorized_keys && \
 	ssh-keygen -t rsa -P '' -f  /home/hadoop/.ssh/hadoop_key && \
-#	ssh-copy-id -i /home/hadoop/.ssh/hadoop_key.pub /home/hadoop/.ssh/authorized_keys
 	cat /home/hadoop/.ssh/hadoop_key.pub >> /home/hadoop/.ssh/authorized_keys
 
 RUN wget https://gist.githubusercontent.com/rdaadr/2f42f248f02aeda18105805493bb0e9b/raw/6303e424373b3459bcf3720b253c01373666fe7c/hadoop-env.sh -O /usr/local/hadoop/hadoop-env.sh
@@ -55,6 +51,8 @@ RUN sed -Ei 's/([\%])YARN_RESOURCE_MANAGER_HOSTNAME[\%]/$HOST_NAME/g ; \
 	s/([\%])NODE_MANAGER_LOG_DIR[\%]/\/opt\/mount1\/nodemanager-log-dir\,\/opt\/mount2\/nodemanager-log-dir/g' /usr/local/hadoop/yarn-site.xml
 
 RUN chmod +x /usr/local/hadoop
+
+ADD start-hdfs.sh start-yarn.sh
 
 USER hdfs
 
