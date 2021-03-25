@@ -1,0 +1,42 @@
+version: "3"
+
+services: 
+  hdfs_hadoop:
+    build: hdfs_test/
+    hostname: scylla
+    ports:
+      - 9000:9000
+      - 50010:50010
+      - 50020:50020
+      - 50070:50070
+      - 50075:50075
+      - 50090:50090
+    environment:
+      - JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+      - HADOOP_HOME=/usr/local/hadoop
+    volumes:
+      - /opt/mount1/namenode-dir:/opt/mount1/namenode-dir
+      - /opt/mount2/namenode-dir:/opt/mount2/namenode-dir
+      - /hadoop/dfs/sname1:/hadoop/dfs/sname1
+      - /hadoop/dfs/data1:/hadoop/dfs/data1
+  yarn_hadoop:
+    build: yarn_test/
+    hostname: charybdis
+    ports:
+      - 8030:8030
+      - 8031:8031
+      - 8032:8032
+      - 8033:8033
+      - 8040:8040
+      - 8042:8042
+      - 8088:8088
+    environment:
+      - JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+      - HADOOP_HOME=/usr/local/hadoop
+    volumes:
+      - /opt/mount1/datanode-dir:/opt/mount1/datanode-dir
+      - /opt/mount2/datanode-dir:/opt/mount2/datanode-dir
+      - /hadoop/dfs/sname1:/hadoop/dfs/sname1
+      - /hadoop/dfs/data1:/hadoop/dfs/data1
+
+
