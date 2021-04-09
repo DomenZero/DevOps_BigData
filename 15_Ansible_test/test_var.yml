@@ -1,0 +1,20 @@
+- name: show me an encrypted var 
+  hosts: localhost 
+  gather_facts: false 
+ 
+  vars_files: 
+    - a_vars.yaml 
+ 
+  tasks: 
+    - name: print the variable 
+      debug: 
+        var: something
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Change user password
+      user:
+        name: admin
+        update_password: always
+        password: "{{ newpassword|password_hash('sha512') }}"
