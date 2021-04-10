@@ -1,6 +1,6 @@
 ---
 - name: Update software, install 
-  hosts: all
+  hosts: remote_admin
   vars_files:
         - a_var.yml
   become: yes
@@ -61,7 +61,7 @@
         - name: Create a database
           mysql_db:
               login_user: root
-              login_password: '{{ db_admin_pass }}'
+              login_password: 'elf7!Alien'
               name: '{{ db_name }}'
               state: present
         - name: Create a database user
