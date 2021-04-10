@@ -1,6 +1,6 @@
 ---
 - name: Create user admin, SSH and make
-  hosts: all
+  hosts: remote
   vars_files:
         - a_var.yml
   tasks:
