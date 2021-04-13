@@ -13,7 +13,7 @@ try:
     with open(sys.argv[1], 'r') as file_input:
         list_words = file_input.read().splitlines()
 
-    while n!=True:
+    while n=False:
         user_input = input("Please input word ")
         listtest = user_input
         for word in list_words:
