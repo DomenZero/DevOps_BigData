@@ -61,7 +61,7 @@
         - name: Create a database
           mysql_db:
               login_user: root
-              login_password: 'elf7!Alien'
+              login_password: '{{db_root_old_pass}}'
               name: '{{ db_name }}'
               state: present
         - name: Create a database user
