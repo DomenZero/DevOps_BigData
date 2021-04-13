@@ -1,0 +1,6 @@
+---
+        - name: Run mySQL service
+          service:
+              name: mysqld
+              state: started
+              enabled: True

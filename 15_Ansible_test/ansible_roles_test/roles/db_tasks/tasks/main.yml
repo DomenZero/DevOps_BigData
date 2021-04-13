@@ -1,0 +1,19 @@
+---
+        - name: Setting up root credentials
+          mysql_user:
+              name: root
+              host_all: yes
+              password: '{{ db_root_old_pass }}'
+              check_implicit_admin: true
+        - name: Create a database
+          mysql_db:
+              login_user: root
+              login_password: '{{db_root_old_pass}}'
+              name: '{{ db_name }}'
+              state: present
+        - name: Create a database user
+          mysql_user:
+              name: admin
+              password: '{{ db_admin_pass }}'
+              priv: "{{ db_name }}.*:ALL"
+              state: present

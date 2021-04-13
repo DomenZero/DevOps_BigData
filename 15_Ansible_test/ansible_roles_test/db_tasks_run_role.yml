@@ -1,0 +1,8 @@
+---
+- name: Database tasks
+  hosts: remote_admin
+  become: yes
+  become_user: admin
+  remote_user: admin
+  roles: 
+    - role: db_tasks
