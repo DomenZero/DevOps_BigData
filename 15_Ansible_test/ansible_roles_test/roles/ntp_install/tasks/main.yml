@@ -16,5 +16,6 @@
               state: latest
         - name: Replace ntp default config
           template:
-              src: data/nginx.conf
+              src: files/nginx.conf
               dest: /etc/nginx/nginx.conf
+
