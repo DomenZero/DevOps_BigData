@@ -1,0 +1,7 @@
+---
+- name: Create user admin, SSH and make
+  hosts: remote
+  become_user: root
+  become: yes
+  roles: 
+    - role: user_permit

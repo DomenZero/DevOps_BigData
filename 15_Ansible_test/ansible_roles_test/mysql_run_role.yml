@@ -1,0 +1,8 @@
+---
+- name: Mysql  create db, user and start service
+  hosts: remote_admin
+  become: yes
+  become_user: admin
+  remote_user: admin
+  roles: 
+    - role: mysql

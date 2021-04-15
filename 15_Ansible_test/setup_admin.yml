@@ -1,0 +1,29 @@
+---
+- name: Create user admin, SSH and make
+  hosts: remote
+  vars_files:
+        - a_var.yml
+  tasks:
+        - name: Group 'wheel' creat
+          ansible.builtin.group:
+                 name: wheel
+                 state: present
+
+        - name: Allow 'wheel' group to have passwordless sudo
+          lineinfile:
+               dest: /etc/sudoers
+               state: present
+               regexp: '^%wheel'
+               line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+               validate: visudo -cf %s
+        - name: Build user
+          ansible.builtin.user:
+               name: admin
+               groups: "wheel"
+               password: "{{ pass|password_hash('sha512') }}"
+        - name: SSH Key delivery
+          authorized_key:
+               user: admin
+               key: "{{ lookup('file', '/home/admin/.ssh/ansible_admin.pub') }}"
+               state: present
+               exclusive: True 

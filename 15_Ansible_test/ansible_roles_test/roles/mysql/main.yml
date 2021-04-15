@@ -1,0 +1,21 @@
+        - name: install pymysql
+          command: pip3 install pymysql
+
+        - name: Package mysql download
+          get_url:
+              url: https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+              dest: /tmp/mysql80-community-release-el7-3.noarch.rpm
+              mode: 0660
+              force_basic_auth: yes
+        - name: RPM prepare
+          yum:
+              name: /tmp/mysql80-community-release-el7-3.noarch.rpm
+              state: present
+        - name: Install the MySQL packages
+          yum:
+              name:
+                - mysql-server
+                - mysql-community-server
+                - mysql-community-client
+                - python3-PyMySQL
+                - python2-PyMySQL

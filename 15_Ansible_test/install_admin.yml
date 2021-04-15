@@ -1,0 +1,72 @@
+---
+- name: Update software, install 
+  hosts: remote_admin
+  vars_files:
+        - a_var.yml
+  become: yes
+  remote_user: admin
+  tasks:
+        - name: Update all software
+          yum:
+              name: '*'
+              state: latest
+        - name: Install the nginx, mysql
+          yum:
+              name: 
+               - epel-release
+               - nginx
+               - mysql
+               - python3
+              state: latest  
+        - name: Install nodejs
+          yum:
+              name: nodejs
+              state: latest
+        - name: Replace ntp default config
+          template:
+              src: data/nginx.conf
+              dest: /etc/nginx/nginx.conf
+        - name: install pymysql
+          command: pip3 install pymysql
+
+        - name: Package mysql download
+          get_url:
+              url: https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+              dest: /tmp/mysql80-community-release-el7-3.noarch.rpm
+              mode: 0660
+              force_basic_auth: yes
+        - name: RPM prepare
+          yum:
+              name: /tmp/mysql80-community-release-el7-3.noarch.rpm
+              state: present
+        - name: Install the MySQL packages
+          yum:
+              name:
+                - mysql-server
+                - mysql-community-server
+                - mysql-community-client
+                - python3-PyMySQL
+                - python2-PyMySQL
+        - name: Run mySQL service
+          service:
+              name: mysqld
+              state: started
+              enabled: True
+        - name: Setting up root credentials
+          mysql_user:
+              name: root
+              host_all: yes
+              password: '{{ db_root_old_pass }}'
+              check_implicit_admin: true
+        - name: Create a database
+          mysql_db:
+              login_user: root
+              login_password: '{{db_root_old_pass}}'
+              name: '{{ db_name }}'
+              state: present
+        - name: Create a database user
+          mysql_user:
+              name: admin
+              password: '{{ db_admin_pass }}'
+              priv: "{{ db_name }}.*:ALL"
+              state: present
